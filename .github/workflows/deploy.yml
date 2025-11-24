@@ -21,6 +21,11 @@ jobs:
           php-version: '8.2'
           extensions: mbstring, intl, pdo, pdo_mysql, bcmath
           coverage: none
+      
+      - name: Prepare bootstrap/cache
+        run: |
+          mkdir -p bootstrap/cache
+          chmod -R 775 bootstrap/cache
 
       - name: Install Composer dependencies
         run: |
