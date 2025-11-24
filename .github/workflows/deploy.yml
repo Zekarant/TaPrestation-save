@@ -1,4 +1,4 @@
-name: Deploy to OVH via SFTP
+name: Build & Deploy Laravel to OVH
 
 on:
   push:
@@ -6,49 +6,41 @@ on:
       - develop
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Prepare Laravel directories
-        run: |
-          mkdir -p bootstrap/cache
-          chmod -R 775 bootstrap/cache
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
-          extensions: mbstring, openssl, pdo, pdo_mysql, tokenizer, xml, ctype, json, fileinfo, curl
+          php-version: 8.2
+          extensions: mbstring, pdo_mysql, openssl, fileinfo
 
       - name: Install Composer dependencies
-        run: composer install --no-dev --optimize-autoloader
+        run: composer install --optimize-autoloader --no-dev
 
-      # Ignore front-end build if Node.js is not needed
-      - name: Skip NPM build (no Node.js available)
-        run: echo "Skipping NPM build"
-      
-      - name: Prepare Laravel directories
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install & build assets
         run: |
-          mkdir -p bootstrap/cache
-          mkdir -p storage/framework/views
-          chmod -R 775 bootstrap/cache storage
+          npm install
+          npm run build
 
-
-      - name: Laravel optimize
-        run: php artisan optimize
-
-      - name: Upload to OVH via SFTP
+      - name: Deploy to OVH (SCP)
         uses: appleboy/scp-action@v0.1.5
         with:
           host: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASSWORD }}
           port: 22
-          source: "."
-          target: "/taprestation"
-          strip_components: 1
+          source: "./"
+          target: "${{ secrets.FTP_PATH }}"
+          rm: false
+          strip_components: 0
 
