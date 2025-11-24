@@ -1,0 +1,42 @@
+name: Deploy to OVH via SFTP
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, openssl, pdo, pdo_mysql, tokenizer, xml, ctype, json, fileinfo, curl
+
+      - name: Install Composer dependencies
+        run: composer install --no-dev --optimize-autoloader
+
+      - name: Install NPM dependencies
+        run: |
+          npm ci
+          npm run build
+
+      - name: Laravel optimize
+        run: php artisan optimize
+
+      - name: Upload to OVH via SFTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./    
+          server-dir: ${{ secrets.FTP_PATH }}/ 
+          protocol: ftps
+          state-name: .ftp-deploy-sync-state.json
