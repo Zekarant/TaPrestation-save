@@ -30,6 +30,12 @@ jobs:
       # Ignore front-end build if Node.js is not needed
       - name: Skip NPM build (no Node.js available)
         run: echo "Skipping NPM build"
+      
+      - name: Prepare Laravel directories
+        run: |
+          mkdir -p bootstrap/cache
+          mkdir -p storage/framework/views
+          chmod -R 775 bootstrap/cache storage
 
 
       - name: Laravel optimize
