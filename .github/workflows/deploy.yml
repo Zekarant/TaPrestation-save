@@ -35,16 +35,3 @@ jobs:
         run: |
           npm install
           npm run build
-
-      - name: Deploy to OVH (SCP)
-        uses: appleboy/scp-action@v0.1.5
-        with:
-          host: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USER }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          port: 22
-          source: "./"
-          target: "${{ secrets.FTP_PATH }}"
-          rm: false
-          strip_components: 0
-
