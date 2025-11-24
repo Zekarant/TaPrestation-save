@@ -1,4 +1,4 @@
-name: Build & Deploy Laravel to OVH
+name: Deploy Laravel App to OVH
 
 on:
   push:
@@ -6,32 +6,62 @@ on:
       - develop
 
 jobs:
-  build:
+  deploy:
+    name: Deploy to OVH Web Hosting
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
+      # ---------- PHP & COMPOSER ----------
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
-          extensions: mbstring, pdo_mysql, openssl, fileinfo
-      - name: Ensure Laravel bootstrap/cache exists
-        run: |
-          mkdir -p bootstrap/cache
-          chmod -R 777 bootstrap/cache
+          php-version: '8.2'
+          extensions: mbstring, intl, pdo, pdo_mysql, bcmath
+          coverage: none
 
       - name: Install Composer dependencies
-        run: composer install --optimize-autoloader --no-dev
+        run: |
+          composer install --optimize-autoloader --no-dev
 
-      - name: Setup Node
+      # ---------- NODE / VITE ----------
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: '18'
 
-      - name: Install & build assets
+      - name: Install NPM dependencies
+        run: npm install
+
+      - name: Build assets (Vite)
+        run: npm run build
+
+      # ---------- SUPPRESSION DES FICHIERS INUTILES ----------
+      - name: Clean up files before deploy
         run: |
-          npm install
-          npm run build
+          rm -rf node_modules
+          rm -rf tests
+          rm -f .env.example
+          rm -f .env     # IMPORTANT → on NE déploie PAS le .env OVH !
+
+      # ---------- DEPLOIEMENT FTP OVH ----------
+      - name: Upload to OVH Hosting (FTP)
+        uses: SamKirkland/FTP-Deploy-Action@4.3.3
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: "./"
+          server-dir: "/taprestation/"
+          git-ftp-args: "--insecure"
+
+      # ---------- OPTIMIZE LARAVEL SUR OVH (optionnel) ----------
+      # À activer uniquement si ton hébergement OVH permet d'exécuter PHP CLI
+      # via "php /home/.../artisan"
+      - name: Post-deploy optimize (Optional)
+        if: ${{ false }} # Désactivé par défaut
+        run: |
+          echo "php artisan optimize"
+
