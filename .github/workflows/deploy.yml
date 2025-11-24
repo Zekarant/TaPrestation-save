@@ -42,12 +42,12 @@ jobs:
         run: php artisan optimize
 
       - name: Upload to OVH via SFTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        uses: appleboy/scp-action@v0.1.5
         with:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./    
-          server-dir: ${{ secrets.FTP_PATH }}/ 
-          protocol: ftps
-          state-name: .ftp-deploy-sync-state.json
+        port: 22
+        source: "."
+        target: "/taprestation"
+
