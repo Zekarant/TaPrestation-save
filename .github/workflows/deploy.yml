@@ -27,10 +27,10 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-dev --optimize-autoloader
 
-      - name: Install NPM dependencies
-        run: |
-          npm ci
-          npm run build
+      # Ignore front-end build if Node.js is not needed
+      - name: Skip NPM build (no Node.js available)
+        run: echo "Skipping NPM build"
+
 
       - name: Laravel optimize
         run: php artisan optimize
