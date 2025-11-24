@@ -18,6 +18,10 @@ jobs:
         with:
           php-version: 8.2
           extensions: mbstring, pdo_mysql, openssl, fileinfo
+      - name: Ensure Laravel bootstrap/cache exists
+        run: |
+          mkdir -p bootstrap/cache
+          chmod -R 777 bootstrap/cache
 
       - name: Install Composer dependencies
         run: composer install --optimize-autoloader --no-dev
