@@ -57,14 +57,21 @@ jobs:
           php artisan view:cache
 
       # 5️⃣ Upload FTP vers OVH
-      - name: Deploy via SFTP
-        uses: appleboy/scp-action@master
+      - name: Deploy to OVH via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           host: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftp          # ou ftp si FTPS non supporté
           port: ${{ secrets.FTP_PORT }}
-          source: "./"       # dossier local à envoyer
-          target: ${{ secrets.FTP_PATH }}  # chemin distant
-          strip_components: 1
-
+          local-dir: ./           # le dossier à déployer
+          server-dir: ${{ secrets.FTP_PATH }}
+          exclude: |
+            **/.git*
+            **/.github*
+            **/node_modules/**
+            **/tests/**
+            **/storage/logs/**
+            **/storage/framework/cache/**
+            **/.env
