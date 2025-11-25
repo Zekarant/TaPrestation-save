@@ -68,12 +68,17 @@ jobs:
           local-dir: ./           # le dossier à déployer
           server-dir: ${{ secrets.FTP_PATH }}
           exclude: |
-            **/.git*                   # Répertoire Git et fichiers associés
-            **/.github*                # Workflows GitHub Actions
-            **/node_modules/**          # Dépendances Node (elles ne sont pas nécessaires sur le serveur)
-            **/tests/**                 # Tests unitaires et fonctionnels
-            **/storage/logs/**          # Logs générés par Laravel
-            **/storage/framework/cache/** # Cache Laravel (sera régénéré)
-            **/.env                     # Fichier d’environnement (ne jamais le mettre en production)
-            /vendor/**                # (optionnel selon stratégie) Dépendances Composer si tu veux installer via composer sur le serveur
+              .git*
+              .github*
+              node_modules/**
+              tests/**
+              storage/logs/**
+              storage/framework/cache/**
+              .env
+              vendor/**
+              composer.lock
+              package-lock.json
+              yarn.lock
+              phpunit.xml
+
 
