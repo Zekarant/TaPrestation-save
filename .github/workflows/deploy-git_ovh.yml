@@ -1,0 +1,63 @@
+name: Deploy to OVH via FTP
+
+on:
+  push:
+    branches:
+      - develop   # ou main selon ton workflow
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Récupère le code du repo
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2️⃣ Installe PHP + Composer
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, bcmath, mysql, curl
+
+      - name: Install Composer dependencies
+        run: composer install --no-dev --optimize-autoloader
+
+      # 3️⃣ Installe Node + Build Vite
+      - name: Setup NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install npm dependencies
+        run: npm install
+
+      - name: Build frontend assets
+        run: npm run build
+
+      # 4️⃣ Laravel optimisations
+      - name: Laravel cache optimizations
+        run: |
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
+
+      # 5️⃣ Upload FTP vers OVH
+      - name: 📤 Deploy to OVH with FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: ${{ secrets.FTP_PORT }}
+          server-dir: ${{ secrets.FTP_PATH }}
+          exclude: |
+            **/.git*
+            **/.github*
+            **/node_modules/**
+            **/tests/**
+            **/storage/logs/**
+            **/storage/framework/cache/**
+            **/.env
