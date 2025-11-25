@@ -1,0 +1,14 @@
+name: Deploy to Test
+
+on:
+  push:
+    branches: [ develop ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Déployer en test
+        run: |
+          ssh user@test-server "cd /var/www/test && git pull && npm install && npm run build"
