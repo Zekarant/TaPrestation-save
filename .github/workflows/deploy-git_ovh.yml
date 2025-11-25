@@ -75,5 +75,5 @@ jobs:
             **/storage/logs/**          # Logs générés par Laravel
             **/storage/framework/cache/** # Cache Laravel (sera régénéré)
             **/.env                     # Fichier d’environnement (ne jamais le mettre en production)
-            **/vendor/**                # (optionnel selon stratégie) Dépendances Composer si tu veux installer via composer sur le serveur
+            /vendor/**                # (optionnel selon stratégie) Dépendances Composer si tu veux installer via composer sur le serveur
 
