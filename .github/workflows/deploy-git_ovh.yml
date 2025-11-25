@@ -58,7 +58,7 @@ jobs:
 
       # 5️⃣ Upload FTP vers OVH
       - name: 📤 Deploy to OVH with FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        uses: appleboy/ssh-action@master
         with:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USER }}
