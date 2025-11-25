@@ -65,7 +65,7 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftp          # ou ftp si FTPS non supporté
           port: ${{ secrets.FTP_PORT }}
-          local-dir: "./TaPrestation-master"           # le dossier à déployer
+          local-dir: ./           # le dossier à déployer
           server-dir: ${{ secrets.FTP_PATH }}
           exclude: |
             **/.git*
