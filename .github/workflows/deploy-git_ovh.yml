@@ -13,6 +13,11 @@ jobs:
       # 1️⃣ Récupère le code du repo
       - name: Checkout code
         uses: actions/checkout@v3
+      
+      - name: Prepare Laravel
+        run: |
+          mkdir -p bootstrap/cache
+          chmod -R 775 bootstrap/cache
 
       # 2️⃣ Installe PHP + Composer
       - name: Setup PHP
