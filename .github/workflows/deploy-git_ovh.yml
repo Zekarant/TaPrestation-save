@@ -13,7 +13,15 @@ jobs:
       # 1️⃣ Récupère le code du repo
       - name: Checkout code
         uses: actions/checkout@v3
-      
+
+      - name: Prepare Laravel directories
+        run: |
+          mkdir -p storage/framework/views
+          mkdir -p storage/framework/cache
+          mkdir -p storage/logs
+          mkdir -p bootstrap/cache
+          chmod -R 775 storage bootstrap/cache
+
       - name: Prepare Laravel
         run: |
           mkdir -p bootstrap/cache
