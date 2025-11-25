@@ -57,14 +57,14 @@ jobs:
           php artisan view:cache
 
       # 5️⃣ Upload FTP vers OVH
-      - name: Deploy to OVH via SFTP
-        uses: appleboy/ssh-action@master
+      - name: Deploy via SFTP
+        uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASSWORD }}
           port: ${{ secrets.FTP_PORT }}
-          protocol: "sftp"
-          script: |
-            rsync -avz --exclude='.git*' --exclude='.github*' --exclude='node_modules/' --exclude='tests/' --exclude='storage/logs/' --exclude='storage/framework/cache/' ./ ${{ secrets.FTP_PATH }}
+          source: "./"       # dossier local à envoyer
+          target: ${{ secrets.FTP_PATH }}  # chemin distant
+          strip_components: 1
 
