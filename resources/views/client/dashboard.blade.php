@@ -625,15 +625,11 @@ document.addEventListener('DOMContentLoaded', function() {
         button.addEventListener('click', function(e) {
             e.preventDefault();
             currentForm = this.closest('form');
-            unfollowModal.classList.remove('hidden');
+            unfollowModal.style.display = 'flex';
             
             // Add animation classes
             setTimeout(() => {
                 unfollowModal.classList.remove('opacity-0');
-                const modalContent = unfollowModal.querySelector('.modal-show');
-                modalContent.classList.remove('scale-95');
-                modalContent.classList.add('scale-100');
-                modalContent.classList.remove('opacity-0');
             }, 10);
         });
     });
@@ -666,24 +662,18 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Close unfollow modal with Escape key
     document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && unfollowModal && !unfollowModal.classList.contains('hidden')) {
+        if (e.key === 'Escape' && unfollowModal && unfollowModal.style.display === 'flex') {
             closeUnfollowModal();
         }
     });
     
     // Function to close unfollow modal with animation
     function closeUnfollowModal() {
-        const modalContent = unfollowModal.querySelector('.modal-show');
-        if (modalContent) {
-            modalContent.classList.remove('scale-100');
-            modalContent.classList.add('scale-95');
-            modalContent.classList.add('opacity-0');
-        }
         if (unfollowModal) {
             unfollowModal.classList.add('opacity-0');
             
             setTimeout(() => {
-                unfollowModal.classList.add('hidden');
+                unfollowModal.style.display = 'none';
             }, 300);
         }
     }
@@ -691,8 +681,8 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <!-- Modal de confirmation de désabonnement -->
-<div id="unfollowModal" class="fixed inset-0 flex items-center justify-center z-50 hidden transition-opacity duration-300" style="backdrop-filter: blur(5px); background-color: rgba(239, 68, 68, 0.8);">
-    <div class="bg-white rounded-xl shadow-2xl p-6 sm:p-8 max-w-md w-full mx-4 border-4 border-red-500 transform transition-all duration-300 scale-95 opacity-0 modal-show">
+<div id="unfollowModal" class="fixed inset-0 flex items-center justify-center z-50 transition-opacity duration-300" style="display: none; backdrop-filter: blur(5px); background-color: rgba(239, 68, 68, 0.8);">
+    <div class="bg-white rounded-xl shadow-2xl p-6 sm:p-8 max-w-md w-full mx-4 border-4 border-red-500 transform transition-all duration-300">
         <div class="text-center">
             <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100">
                 <svg class="h-10 w-10 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">

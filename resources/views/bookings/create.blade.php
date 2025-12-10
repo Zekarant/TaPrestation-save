@@ -37,6 +37,13 @@
     animation: slotSelect 0.3s ease-in-out;
 }
 
+/* Slot grid base definition */
+.slot-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.5rem;
+}
+
 /* Responsive adjustments for slot grid */
 @media (max-width: 640px) {
     .slot-grid {
@@ -44,21 +51,15 @@
     }
 }
 
-@media (min-width: 641px) and (max-width: 768px) {
+@media (min-width: 641px) and (max-width: 1024px) {
     .slot-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
     }
 }
 
-@media (min-width: 769px) and (max-width: 1024px) {
-    .slot-grid {
-        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-    }
-}
-
 @media (min-width: 1025px) {
     .slot-grid {
-        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
     }
 }
 
@@ -68,15 +69,41 @@
         position: static;
     }
 }
+
+/* Flatpickr calendar styling */
+.flatpickr-calendar {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+    border: 2px solid #BFDBFE !important;
+    border-radius: 0.75rem !important;
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange {
+    background: #3B82F6 !important;
+    border-color: #3B82F6 !important;
+}
+
+.flatpickr-day:hover:not(.selected) {
+    background: #DBEAFE !important;
+    border-color: #93C5FD !important;
+}
+
+.flatpickr-day.today {
+    border-color: #3B82F6 !important;
+}
+
+#date-calendar {
+    width: 100%;
+}
 </style>
 
 <div class="bg-blue-50">
-    <div class="container mx-auto px-4 py-6 sm:py-8">
-        <div class="max-w-4xl mx-auto">
-            <div class="mb-6 sm:mb-8 text-center">
-                <h1 class="text-2xl xs:text-3xl sm:text-4xl font-extrabold text-blue-900 mb-1 sm:mb-2">Nouvelle Réservation</h1>
-                <p class="text-base sm:text-lg text-blue-700 px-2">Réservez un créneau pour le service sélectionné</p>
-            </div>
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-[2000px]">
+        <div class="mb-6 sm:mb-8 text-center">
+            <h1 class="text-2xl xs:text-3xl sm:text-4xl font-extrabold text-blue-900 mb-1 sm:mb-2">Nouvelle Réservation</h1>
+            <p class="text-base sm:text-lg text-blue-700 px-2">Réservez un créneau pour le service sélectionné</p>
+        </div>
 
             @if(session('error'))
                 <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 sm:p-4 rounded-md mb-5 sm:mb-6 shadow-md">
@@ -158,9 +185,36 @@
                 
                 <!-- Formulaire de réservation -->
                 <div class="lg:col-span-2">
-                    <div class="bg-white rounded-xl shadow-lg border border-blue-200 p-4 sm:p-6 md:p-8">
+                    <div class="bg-white rounded-xl shadow-lg border border-blue-200 p-4 sm:p-6 md:p-8 max-w-[1800px] mx-auto">
                         <h2 class="text-xl sm:text-2xl font-bold text-blue-800 mb-4 sm:mb-6 border-b-2 border-blue-200 pb-2 sm:pb-3">Sélectionner un créneau</h2>
                         
+                        <!-- Layout en 2 colonnes : Calendrier à gauche, Créneaux à droite -->
+                        <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                            <!-- Colonne gauche : Calendrier (2 colonnes sur 5) -->
+                            <div class="lg:col-span-2">
+                                <div class="flex items-center mb-4">
+                                    <span class="inline-flex items-center justify-center w-8 h-8 bg-blue-600 text-white rounded-full mr-2 text-sm">1</span>
+                                    <h3 class="text-lg font-semibold text-blue-900">Choisissez une date</h3>
+                                </div>
+                                
+                                <div class="bg-blue-50 rounded-xl p-4 border-2 border-blue-200 lg:sticky lg:top-4">
+                                    <div id="date-calendar" class="bg-white rounded-lg overflow-hidden"></div>
+                                    <input type="hidden" id="selected_date" name="selected_date">
+                                    <div id="selected-date-display" class="hidden mt-4 p-3 bg-white rounded-lg border border-blue-300">
+                                        <p class="text-sm text-gray-600 mb-1">Date sélectionnée :</p>
+                                        <p id="selected-date-text" class="text-lg font-bold text-blue-900"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Colonne droite : Créneaux horaires (3 colonnes sur 5) -->
+                            <div id="slots-section" class="hidden lg:col-span-3">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-blue-900">
+                                    <span class="inline-flex items-center justify-center w-8 h-8 bg-blue-600 text-white rounded-full mr-2 text-sm">2</span>
+                                    Sélectionnez un créneau horaire
+                                </h3>
+                            </div>
                         <form action="{{ route('bookings.store') }}" method="POST" x-data="bookingForm()">
                             @csrf
                             <input type="hidden" name="service_id" value="{{ $service->id }}">
@@ -217,53 +271,9 @@
                                     </div>
                                 @endif
                                 
-                                <div class="mb-5 sm:mb-6">
-                                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3 sm:mb-4">
-                                        <label class="block text-base sm:text-md font-semibold text-gray-800">Créneaux disponibles</label>
-                                        <div class="flex flex-wrap items-center gap-2">
-                                            <button type="button" @click="clearAllSlots()" 
-                                                    x-show="selectedSlots.length > 0"
-                                                    class="text-xs px-2.5 py-1 sm:px-3 sm:py-1 bg-red-100 text-red-700 rounded-full hover:bg-red-200 transition-colors">
-                                                🗑️ Effacer tout
-                                            </button>
-                                            <div class="text-xs text-gray-500">
-                                                <span x-show="selectedSlots.length === 0">Aucun créneau sélectionné</span>
-                                                <span x-show="selectedSlots.length > 0" x-text="selectedSlots.length + ' créneau(x) sélectionné(s)'"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Légende -->
-                                    <div class="mb-3 sm:mb-4 p-3 bg-gray-50 rounded-lg border">
-                                        <p class="text-sm font-medium text-gray-700 mb-2">Légende :</p>
-                                        <div class="flex flex-wrap gap-3 sm:gap-4 text-xs">
-                                            <div class="flex items-center">
-                                                <div class="w-3 h-3 sm:w-4 sm:h-4 border-2 border-gray-300 bg-white rounded mr-1.5 sm:mr-2"></div>
-                                                <span class="text-gray-600">Disponible</span>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <div class="w-3 h-3 sm:w-4 sm:h-4 border-2 border-blue-400 bg-blue-100 rounded mr-1.5 sm:mr-2"></div>
-                                                <span class="text-gray-600">Sélectionné</span>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <div class="w-3 h-3 sm:w-4 sm:h-4 border-2 border-orange-300 bg-orange-50 rounded mr-1.5 sm:mr-2"></div>
-                                                <span class="text-gray-600">Demande en attente</span>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <div class="w-3 h-3 sm:w-4 sm:h-4 border-2 border-gray-200 bg-gray-100 rounded mr-1.5 sm:mr-2"></div>
-                                                <span class="text-gray-600">Réservé</span>
-                                            </div>
-                                        </div>
-                                        <div class="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-gray-200">
-                                            <p class="text-xs text-blue-700 font-medium mb-1">💡 Conseils :</p>
-                                            <ul class="text-xs text-gray-600 space-y-1">
-                                                <li>• Cliquez sur plusieurs créneaux pour réserver plusieurs heures</li>
-                                                <li>• Utilisez Ctrl+A (Cmd+A sur Mac) pour sélectionner tous les créneaux</li>
-                                                <li>• Appuyez sur Échap pour désélectionner tous les créneaux</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="space-y-3 sm:space-y-4">
+                                <!-- Créneaux horaires en premier -->
+                                <div class="mb-5">
+                                    <div class="space-y-3">
                                         @php
                                             $groupedSlots = collect($availableSlots)->groupBy(function($slot) {
                                                 return $slot['datetime']->format('Y-m-d');
@@ -271,15 +281,12 @@
                                         @endphp
 
                                         @foreach($groupedSlots as $date => $slots)
-                                            <div x-data="{ open: {{ $loop->first ? 'true' : 'false' }} }" class="border-2 border-gray-200 rounded-lg overflow-hidden">
-                                                <button type="button" @click="open = !open" class="w-full flex justify-between items-center p-3 sm:p-4 bg-blue-50 hover:bg-blue-100 focus:outline-none transition duration-200">
-                                                    <span class="font-bold text-blue-900 text-sm sm:text-base">{{ \Carbon\Carbon::parse($date)->locale('fr')->isoFormat('dddd D MMMM YYYY') }}</span>
-                                                    <svg class="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 transform transition-transform" :class="{ 'rotate-180': open }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                                                    </svg>
-                                                </button>
-                                                <div x-show="open" x-transition class="p-3 sm:p-4 bg-white">
-                                                    <div class="slot-grid gap-2 sm:gap-3">
+                                            <div x-data="{ open: true }" class="border-2 border-gray-200 rounded-lg overflow-hidden">
+                                                <div class="w-full p-2 bg-blue-50">
+                                                    <span class="font-bold text-blue-900 text-sm">{{ \Carbon\Carbon::parse($date)->locale('fr')->isoFormat('dddd D MMMM') }}</span>
+                                                </div>
+                                                <div x-show="open" class="p-3 bg-white">
+                                                    <div class="slot-grid gap-2">
                                                         @foreach($slots as $slot)
                                                             @if($slot['is_booked'])
                                                                 <!-- Créneau réservé (confirmé) - grisé et non cliquable -->
@@ -391,6 +398,47 @@
                                         @endforeach
                                     </div>
                                 </div>
+                                
+                                <!-- Informations de sélection en dessous -->
+                                <div class="mb-5">
+                                    <div class="flex items-center justify-between mb-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                                        <div class="flex items-center gap-2">
+                                            <label class="text-sm font-semibold text-gray-800">Créneaux sélectionnés</label>
+                                            <div class="text-xs text-gray-500">
+                                                <span x-show="selectedSlots.length === 0">(Aucun)</span>
+                                                <span x-show="selectedSlots.length > 0" x-text="'(' + selectedSlots.length + ')'"></span>
+                                            </div>
+                                        </div>
+                                        <button type="button" @click="clearAllSlots()" 
+                                                x-show="selectedSlots.length > 0"
+                                                class="text-xs px-3 py-1 bg-red-100 text-red-700 rounded-full hover:bg-red-200 transition-colors">
+                                            🗑️ Effacer tout
+                                        </button>
+                                    </div>
+                                    
+                                    <!-- Légende compacte -->
+                                    <div class="p-3 bg-gray-50 rounded-lg border">
+                                        <p class="text-xs font-medium text-gray-700 mb-2">Légende :</p>
+                                        <div class="flex flex-wrap gap-3 text-xs">
+                                            <div class="flex items-center">
+                                                <div class="w-3 h-3 border-2 border-gray-300 bg-white rounded mr-1.5"></div>
+                                                <span class="text-gray-600">Disponible</span>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <div class="w-3 h-3 border-2 border-blue-400 bg-blue-100 rounded mr-1.5"></div>
+                                                <span class="text-gray-600">Sélectionné</span>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <div class="w-3 h-3 border-2 border-orange-300 bg-orange-50 rounded mr-1.5"></div>
+                                                <span class="text-gray-600">Attente</span>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <div class="w-3 h-3 border-2 border-gray-200 bg-gray-100 rounded mr-1.5"></div>
+                                                <span class="text-gray-600">Réservé</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <!-- Sélection actuelle -->
                                 <div x-show="selectedSlots.length > 0" class="my-5 sm:my-6 p-3 sm:p-4 bg-green-50 border-l-4 border-green-500 rounded-md shadow-sm">
@@ -475,10 +523,11 @@
                                 </div>
                             @endif
                         </form>
+                        </div><!-- Fin de slots-section (colonne droite) -->
+                        </div><!-- Fin du grid 2 colonnes -->
                     </div>
                 </div>
             </div>
-        </div>
     </div>
 </div>
 
@@ -718,6 +767,170 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         });
+    }
+});
+
+// Initialize Flatpickr calendar for date selection
+document.addEventListener('DOMContentLoaded', function() {
+    // Prepare available dates from PHP slots
+    const availableSlots = @json($availableSlots);
+    
+    console.log('Available slots:', availableSlots); // Debug
+    
+    // Extract unique dates from slots
+    const availableDates = [...new Set(availableSlots.map(slot => {
+        // slot.datetime is already a formatted datetime string
+        let dateStr;
+        if (typeof slot.datetime === 'string') {
+            // If it's already a string, parse it
+            const date = new Date(slot.datetime);
+            dateStr = date.toISOString().split('T')[0];
+        } else if (slot.datetime && slot.datetime.date) {
+            // If it's a Carbon object with date property
+            dateStr = slot.datetime.date.split(' ')[0];
+        } else {
+            console.warn('Unexpected datetime format:', slot.datetime);
+            return null;
+        }
+        return dateStr;
+    }).filter(date => date !== null))];
+    
+    console.log('Available dates for calendar:', availableDates); // Debug
+    
+    // Initialize calendar
+    const calendar = flatpickr("#date-calendar", {
+        inline: true,
+        dateFormat: "Y-m-d",
+        minDate: "today",
+        maxDate: new Date().fp_incr(90), // 90 days from now
+        enable: availableDates.length > 0 ? availableDates : [], // Only enable if we have dates
+        locale: {
+            firstDayOfWeek: 1,
+            weekdays: {
+                shorthand: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+                longhand: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
+            },
+            months: {
+                shorthand: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'],
+                longhand: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
+            }
+        },
+        onChange: function(selectedDates, dateStr) {
+            if (selectedDates.length > 0) {
+                const selectedDate = selectedDates[0];
+                const formattedDate = selectedDate.toLocaleDateString('fr-FR', {
+                    weekday: 'long',
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                });
+                
+                // Update hidden field
+                const hiddenField = document.getElementById('selected_date');
+                if (hiddenField) {
+                    hiddenField.value = dateStr;
+                }
+                
+                // Show selected date if elements exist
+                const dateText = document.getElementById('selected-date-text');
+                const dateDisplay = document.getElementById('selected-date-display');
+                const dateBadge = document.getElementById('selected-date-badge');
+                
+                if (dateText) dateText.textContent = formattedDate;
+                if (dateDisplay) dateDisplay.classList.remove('hidden');
+                if (dateBadge) dateBadge.classList.remove('hidden');
+                
+                // Filter and show slots for selected date
+                filterSlotsByDate(dateStr);
+            }
+        },
+        onReady: function() {
+            setTimeout(() => {
+                const calendarContainer = document.querySelector('.flatpickr-calendar');
+                if (calendarContainer) {
+                    calendarContainer.style.width = '100%';
+                }
+            }, 100);
+        }
+    });
+    
+    // Function to filter slots by selected date
+    function filterSlotsByDate(dateStr) {
+        console.log('Filtering slots for date:', dateStr); // Debug
+        
+        // Parse the selected date
+        const selectedDate = new Date(dateStr + 'T00:00:00');
+        const selectedDay = selectedDate.getDate();
+        const selectedMonth = selectedDate.getMonth(); // 0-11
+        const selectedYear = selectedDate.getFullYear();
+        
+        const monthNames = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 
+                           'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+        const monthName = monthNames[selectedMonth];
+        
+        // Find all date group containers that have the date button pattern
+        // They are divs with x-data attribute that contain a div with date text
+        const allDateContainers = document.querySelectorAll('.border-2.border-gray-200.rounded-lg.overflow-hidden');
+        let hasVisibleSlots = false;
+        
+        console.log('Found', allDateContainers.length, 'date containers'); // Debug
+        
+        allDateContainers.forEach(container => {
+            // Look for the div with the date text inside this specific container
+            // Changed from button.bg-blue-50 to div.bg-blue-50 since we simplified the structure
+            const dateHeader = container.querySelector('.bg-blue-50 span');
+            if (!dateHeader) {
+                console.log('No date header found in container'); // Debug
+                return;
+            }
+            
+            const dateText = dateHeader.textContent.trim();
+            console.log('Checking date text:', dateText); // Debug
+            
+            try {
+                // Check if date text contains the selected day number
+                const dayPattern = new RegExp(`\\b${selectedDay}\\b`);
+                
+                const containsDay = dayPattern.test(dateText);
+                const containsMonth = dateText.toLowerCase().includes(monthName);
+                // Note: We removed year from display, so don't check for it
+                
+                console.log('Match check:', {day: selectedDay, month: monthName, containsDay, containsMonth}); // Debug
+                
+                if (containsDay && containsMonth) {
+                    container.classList.remove('hidden');
+                    console.log('✓ Showing container for:', dateText); // Debug
+                    
+                    // Auto-expand the matching date using Alpine.js (already open by default)
+                    if (typeof Alpine !== 'undefined') {
+                        const alpineData = Alpine.$data(container);
+                        if (alpineData && alpineData.hasOwnProperty('open')) {
+                            alpineData.open = true;
+                        }
+                    }
+                    hasVisibleSlots = true;
+                } else {
+                    container.classList.add('hidden');
+                    console.log('✗ Hiding container for:', dateText); // Debug
+                }
+            } catch (e) {
+                console.error('Error parsing date:', e);
+            }
+        });
+        
+        console.log('Has visible slots:', hasVisibleSlots); // Debug
+        
+        // Show or hide the slots section based on availability
+        const slotsSection = document.getElementById('slots-section');
+        if (slotsSection) {
+            if (hasVisibleSlots) {
+                slotsSection.classList.remove('hidden');
+                // No scroll - the 2-column layout keeps everything visible side by side
+            } else {
+                slotsSection.classList.add('hidden');
+                console.warn('No slots found for selected date');
+            }
+        }
     }
 });
 </script>

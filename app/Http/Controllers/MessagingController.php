@@ -78,7 +78,7 @@ class MessagingController extends Controller
     public function show(User $user)
     {
         $currentUser = Auth::user();
-        
+
         // Vérifier que l'utilisateur peut converser avec l'autre utilisateur
         if ($currentUser->isClient() && $user->role !== 'prestataire') {
             abort(403, 'Vous ne pouvez converser qu\'avec des prestataires.');
@@ -88,12 +88,12 @@ class MessagingController extends Controller
 
         // Récupérer tous les messages entre ces deux utilisateurs
         $messages = Message::where(function ($query) use ($currentUser, $user) {
-                $query->where('sender_id', $currentUser->id)
-                      ->where('receiver_id', $user->id);
-            })
+            $query->where('sender_id', $currentUser->id)
+                ->where('receiver_id', $user->id);
+        })
             ->orWhere(function ($query) use ($currentUser, $user) {
                 $query->where('sender_id', $user->id)
-                      ->where('receiver_id', $currentUser->id);
+                    ->where('receiver_id', $currentUser->id);
             })
             ->orderBy('created_at', 'asc')
             ->get();
@@ -106,7 +106,7 @@ class MessagingController extends Controller
 
         // Charger les relations pour le statut en ligne et les photos de profil
         $user->load(['client', 'prestataire']);
-        
+
         // Refresh user to ensure online status is current
         $user->refresh();
 
@@ -131,7 +131,7 @@ class MessagingController extends Controller
         ]);
 
         $currentUser = Auth::user();
-        
+
         // Vérifier que l'utilisateur peut envoyer un message à l'autre utilisateur
         if ($currentUser->isClient() && $user->role !== 'prestataire') {
             return back()->withErrors(['error' => 'Vous ne pouvez envoyer des messages qu\'aux prestataires.']);
@@ -140,18 +140,31 @@ class MessagingController extends Controller
         }
 
         // Créer le message
-        Message::create([
+        $message = Message::create([
             'sender_id' => $currentUser->id,
             'receiver_id' => $user->id,
             'content' => $request->content,
             'type' => 'text'
         ]);
 
-        return back()->with('success', 'Message envoyé avec succès.');
+        // Si c'est une vraie requête AJAX (avec l'en-tête X-Requested-With), retourner du JSON
+        if ($request->ajax() && $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            $message->load(['sender', 'receiver']);
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'formatted_time' => $message->created_at->format('H:i'),
+                'formatted_date' => $message->created_at->format('d/m/Y'),
+            ]);
+        }
+
+        // Sinon, rediriger vers la conversation
+        $routeName = $currentUser->isClient() ? 'client.messaging.show' : 'prestataire.messages.show';
+        return redirect()->route($routeName, $user)->with('success', 'Message envoyé avec succès.');
     }
 
 
-    
+
     /**
      * Traite les fichiers joints aux messages
      */
@@ -162,15 +175,15 @@ class MessagingController extends Controller
             $originalName = $file->getClientOriginalName();
             $filename = 'file_' . time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
             $path = $file->storeAs('messages/files', $filename, 'public');
-            
+
             $message->file_name = $originalName;
             $message->file_type = $file->getMimeType();
             $message->file_size = $file->getSize();
         }
-        
+
         return $message;
     }
-        
+
     /**
      * Démarre une nouvelle conversation avec un utilisateur.
      *
@@ -180,7 +193,7 @@ class MessagingController extends Controller
     public function startConversation(User $user)
     {
         $currentUser = Auth::user();
-        
+
         // Vérifier que l'utilisateur peut converser avec l'autre utilisateur
         if ($currentUser->role === 'client' && $user->role !== 'prestataire') {
             abort(403, 'Vous ne pouvez converser qu\'avec des prestataires.');
@@ -200,22 +213,22 @@ class MessagingController extends Controller
     public function startConversationWithPrestataire(Prestataire $prestataire)
     {
         $currentUser = Auth::user();
-        
+
         // Vérifier que l'utilisateur courant est un client
         if (!$currentUser->isClient()) {
             abort(403, 'Seuls les clients peuvent contacter les prestataires.');
         }
-        
+
         // Vérifier que le prestataire est approuvé
         if (!$prestataire->is_approved) {
             return redirect()->back()->with('error', 'Ce prestataire n\'est pas disponible.');
         }
-        
+
         // Vérifier que le prestataire a un utilisateur associé
         if (!$prestataire->user) {
             return redirect()->back()->with('error', 'Ce prestataire n\'est pas disponible.');
         }
-        
+
         // Rediriger vers la conversation avec l'utilisateur du prestataire
         return redirect()->route('client.messaging.show', $prestataire->user);
     }
@@ -233,7 +246,7 @@ class MessagingController extends Controller
 
         return redirect()->route('messaging.show', $client->user->id);
     }
-    
+
     /**
      * Met à jour un message (édition)
      */
@@ -241,35 +254,35 @@ class MessagingController extends Controller
     {
         $user = Auth::user();
         $message = Message::findOrFail($id);
-        
+
         // Vérifier que l'utilisateur est l'auteur du message
         if ($message->sender_id !== $user->id) {
             return response()->json(['success' => false, 'message' => 'Non autorisé'], 403);
         }
-        
+
         // Seuls les messages texte peuvent être édités
         if ($message->type !== 'text') {
             return response()->json(['success' => false, 'message' => 'Seuls les messages texte peuvent être édités'], 422);
         }
-        
+
         $validator = Validator::make($request->all(), [
             'content' => 'required|string|max:10000',
         ]);
-        
+
         if ($validator->fails()) {
             return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
         }
-        
+
         $message->content = $request->content;
         $message->edited_at = now();
         $message->save();
-        
+
         return response()->json([
             'success' => true,
             'message' => $message
         ]);
     }
-    
+
     /**
      * Supprime un message
      */
@@ -277,42 +290,42 @@ class MessagingController extends Controller
     {
         $user = Auth::user();
         $message = Message::findOrFail($id);
-        
+
         // Vérifier que l'utilisateur est l'auteur du message
         if ($message->sender_id !== $user->id) {
             return response()->json(['success' => false, 'message' => 'Non autorisé'], 403);
         }
-        
+
         // Supprimer les fichiers associés si nécessaire
         if (in_array($message->type, ['voice', 'file']) && $message->file_path) {
             Storage::disk('public')->delete($message->file_path);
         }
-        
+
         $message->delete();
-        
+
         return response()->json([
             'success' => true,
             'message' => 'Message supprimé avec succès'
         ]);
     }
-    
 
-    
+
+
     /**
      * Marque tous les messages d'une conversation comme lus
      */
     public function markAsRead(Request $request)
     {
         $user = Auth::user();
-        
+
         $validator = Validator::make($request->all(), [
             'recipient_id' => 'required|exists:users,id',
         ]);
-        
+
         if ($validator->fails()) {
             return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
         }
-        
+
         if ($request->recipient_id) {
             // Marquer les messages d'une conversation individuelle comme lus
             Message::where('sender_id', $request->recipient_id)
@@ -320,37 +333,37 @@ class MessagingController extends Controller
                 ->whereNull('read_at')
                 ->update(['read_at' => now()]);
         }
-        
+
         return response()->json([
             'success' => true,
             'message' => 'Messages marqués comme lus'
         ]);
     }
-    
+
     /**
      * Initialise une session de visioconférence
      */
     public function startVideoCall(Request $request)
     {
         $user = Auth::user();
-        
+
         $validator = Validator::make($request->all(), [
             'recipient_id' => 'required|exists:users,id',
         ]);
-        
+
         if ($validator->fails()) {
             return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
         }
-        
+
         // Générer un ID de salle unique
         $roomId = Str::uuid()->toString();
-        
+
         // Créer un message de type appel vidéo
         $message = new Message();
         $message->sender_id = $user->id;
         $message->receiver_id = $request->recipient_id;
         $message->type = 'video_call';
-        
+
         $videoCallData = [
             'room_id' => $roomId,
             'status' => 'ongoing',
@@ -364,53 +377,53 @@ class MessagingController extends Controller
                 ]
             ]
         ];
-        
+
         $message->video_call_data = json_encode($videoCallData);
         $message->save();
-        
+
         return response()->json([
             'success' => true,
             'room_id' => $roomId,
             'message_id' => $message->id
         ]);
     }
-    
+
     /**
      * Supprime une conversation entière avec un utilisateur
      */
     public function deleteConversation(Request $request, User $user)
     {
         $currentUser = Auth::user();
-        
+
         // Vérifier que l'utilisateur est autorisé à supprimer cette conversation
         if ($currentUser->role === 'client' && $user->role !== 'prestataire') {
             return response()->json(['success' => false, 'message' => 'Non autorisé'], 403);
         } elseif ($currentUser->role === 'prestataire' && $user->role !== 'client') {
             return response()->json(['success' => false, 'message' => 'Non autorisé'], 403);
         }
-        
+
         try {
             // Supprimer tous les messages entre ces deux utilisateurs
             $deletedCount = Message::where(function ($query) use ($currentUser, $user) {
-                    $query->where('sender_id', $currentUser->id)
-                          ->where('receiver_id', $user->id);
-                })
+                $query->where('sender_id', $currentUser->id)
+                    ->where('receiver_id', $user->id);
+            })
                 ->orWhere(function ($query) use ($currentUser, $user) {
                     $query->where('sender_id', $user->id)
-                          ->where('receiver_id', $currentUser->id);
+                        ->where('receiver_id', $currentUser->id);
                 })
                 ->delete();
-            
+
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => true,
                     'message' => "Conversation supprimée avec succès ({$deletedCount} messages supprimés)"
                 ]);
             }
-            
+
             return redirect()->route('messaging.index')
                 ->with('success', "Conversation avec {$user->name} supprimée avec succès ({$deletedCount} messages supprimés)");
-                
+
         } catch (\Exception $e) {
             if ($request->expectsJson()) {
                 return response()->json([
@@ -418,12 +431,12 @@ class MessagingController extends Controller
                     'message' => 'Erreur lors de la suppression de la conversation'
                 ], 500);
             }
-            
+
             return redirect()->route('messaging.index')
                 ->with('error', 'Erreur lors de la suppression de la conversation');
         }
     }
-    
+
     /**
      * Recherche des utilisateurs pour ajouter à une conversation
      */
@@ -431,15 +444,15 @@ class MessagingController extends Controller
     {
         $user = Auth::user();
         $query = $request->input('query');
-        
+
         $users = User::where('id', '!=', $user->id)
-            ->where(function($q) use ($query) {
+            ->where(function ($q) use ($query) {
                 $q->where('name', 'like', "%{$query}%")
-                  ->orWhere('email', 'like', "%{$query}%");
+                    ->orWhere('email', 'like', "%{$query}%");
             })
             ->limit(10)
             ->get(['id', 'name', 'email', 'avatar']);
-        
+
         return response()->json([
             'success' => true,
             'users' => $users

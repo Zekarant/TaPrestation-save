@@ -79,6 +79,13 @@ return [
             'transport' => 'array',
         ],
 
+        // Preview mailer - Affiche les emails dans le navigateur (Laravel 12)
+        'preview' => [
+            'transport' => 'log',
+            'channel' => 'mail_preview',
+            'store' => env('MAIL_PREVIEW_STORE', storage_path('emails')),
+        ],
+
         'failover' => [
             'transport' => 'failover',
             'mailers' => [

@@ -249,7 +249,7 @@
     
     <!-- Modal de confirmation de suppression -->
     <div id="deleteConfirmationModal" class="fixed inset-0 flex items-center justify-center z-50 hidden transition-opacity duration-300" style="backdrop-filter: blur(5px); background-color: rgba(16, 185, 129, 0.8);">
-        <div class="bg-white rounded-lg sm:rounded-xl shadow-2xl p-4 sm:p-6 md:p-8 max-w-xs sm:max-w-md w-full mx-4 border-2 sm:border-4 border-red-500 transform transition-all duration-300 scale-95 opacity-0 modal-show">
+        <div class="bg-white rounded-lg sm:rounded-xl shadow-2xl p-4 sm:p-6 md:p-8 max-w-xs sm:max-w-md w-full mx-4 border-2 sm:border-4 border-red-500 transform transition-all duration-300">
             <div class="text-center">
                 <div class="mx-auto flex items-center justify-center h-12 w-12 sm:h-16 sm:w-16 rounded-full bg-red-100">
                     <svg class="h-6 w-6 sm:h-10 sm:w-10 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">

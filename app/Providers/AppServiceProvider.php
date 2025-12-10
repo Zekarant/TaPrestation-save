@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Schema;
 use App\Models\Service;
 use App\Models\Equipment;
 use App\Models\UrgentSale;
@@ -28,6 +29,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Correction pour l'erreur "1071 La clé est trop longue"
+        Schema::defaultStringLength(191);
+
         Log::info('AppServiceProvider: Registering observers');
         Service::observe(ServiceObserver::class);
         Equipment::observe(EquipmentObserver::class);

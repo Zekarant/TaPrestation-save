@@ -26,23 +26,29 @@ class StoreVideoFileRequest extends FormRequest
             'video' => [
                 'required',
                 'file',
-                'mimetypes:video/mp4,video/quicktime,video/webm,video/x-msvideo,video/x-ms-wmv,video/avi,video/mpeg,video/3gpp,video/3gpp2,video/x-flv,video/x-m4v',
-                'max:102400', // 100MB
+                'mimes:mp4,mov,webm,avi,wmv,mpeg,mpg,3gp,3g2,flv,m4v',
+                'max:512000', // 500MB
                 function ($attribute, $value, $fail) {
                     // Check video duration using getID3
                     try {
+                        // Ensure we have a valid file object
+                        if (!is_object($value) || !method_exists($value, 'getPathname')) {
+                            \Log::warning('Invalid file object received for video validation');
+                            return; // Skip validation if not a proper file object
+                        }
+
                         $getID3 = new getID3();
-                        
+
                         // Enable certain modules for better format support
                         $getID3->option_md5_data = true;
                         $getID3->option_md5_data_source = true;
                         $getID3->encoding = 'UTF-8';
-                        
+
                         $fileInfo = $getID3->analyze($value->getPathname());
-                        
+
                         // Try to get duration from different possible sources
                         $duration = null;
-                        
+
                         if (isset($fileInfo['playtime_seconds']) && is_numeric($fileInfo['playtime_seconds'])) {
                             $duration = $fileInfo['playtime_seconds'];
                         } elseif (isset($fileInfo['video']['playtime_seconds']) && is_numeric($fileInfo['video']['playtime_seconds'])) {
@@ -50,7 +56,7 @@ class StoreVideoFileRequest extends FormRequest
                         } elseif (isset($fileInfo['audio']['playtime_seconds']) && is_numeric($fileInfo['audio']['playtime_seconds'])) {
                             $duration = $fileInfo['audio']['playtime_seconds'];
                         }
-                        
+
                         // If we still don't have duration, try to calculate from other data
                         if ($duration === null && isset($fileInfo['bitrate']) && isset($fileInfo['filesize'])) {
                             // Rough calculation: duration = filesize / bitrate
@@ -59,7 +65,7 @@ class StoreVideoFileRequest extends FormRequest
                                 $duration = $fileInfo['filesize'] / ($fileInfo['bitrate'] / 8);
                             }
                         }
-                        
+
                         if ($duration !== null) {
                             if ($duration > 60) {
                                 $fail('La vidéo ne doit pas dépasser 60 secondes. Durée détectée: ' . round($duration, 2) . ' secondes.');

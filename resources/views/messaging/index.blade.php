@@ -1,11 +1,6 @@
 @extends('layouts.app')
 
-@push('styles')
-<link rel="stylesheet" href="{{ asset('css/messaging.css') }}">
-@endpush
-
 @push('scripts')
-<script src="{{ asset('js/messaging.js') }}" defer></script>
 <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 @endpush
 

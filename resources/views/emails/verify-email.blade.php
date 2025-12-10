@@ -1,14 +1,15 @@
+{{-- resources/views/emails/verify-email.blade.php --}}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vérification de votre adresse e-mail - TaPrestation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
-            color: #333;
+            color: #333333;
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
@@ -23,7 +24,7 @@
         }
         .header {
             background-color: #1e40af;
-            color: white;
+            color: #ffffff;
             text-align: center;
             padding: 20px;
         }
@@ -46,7 +47,7 @@
         .logo-text {
             font-size: 24px;
             font-weight: bold;
-            color: white;
+            color: #ffffff;
         }
         .content {
             padding: 30px;
@@ -54,7 +55,7 @@
         .button {
             display: inline-block;
             background-color: #1e40af;
-            color: white;
+            color: #ffffff !important;
             text-decoration: none;
             padding: 12px 24px;
             border-radius: 4px;
@@ -66,7 +67,7 @@
             text-align: center;
             padding: 20px;
             font-size: 12px;
-            color: #666;
+            color: #666666;
         }
         .greeting {
             font-size: 18px;
@@ -75,6 +76,9 @@
         .message {
             margin-bottom: 20px;
         }
+        a {
+            color: #1e40af;
+        }
     </style>
 </head>
 <body>
@@ -82,8 +86,11 @@
         <div class="header">
             <div class="logo-container">
                 <div class="logo-icon">
-                    <!-- Handshake icon as inline SVG for email compatibility -->
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <!-- Icône poignée de main en SVG inline pour compatibilité e-mail -->
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         width="20" height="20" viewBox="0 0 24 24"
+                         fill="none" stroke="white" stroke-width="2"
+                         stroke-linecap="round" stroke-linejoin="round">
                         <path d="M4.5 12.5l3 3a.5.5 0 00.76-.04l3.04-4.56a.5.5 0 01.76-.04l2.74 3.5"></path>
                         <path d="M4 15.5l-.5-3a.5.5 0 01.22-.46l2.78-1.85a.5.5 0 00.15-.74l-1.5-2.5a.5.5 0 01.12-.65l2.5-2.5a.5.5 0 01.71 0l3.5 3.5a.5.5 0 00.71 0l2.5-2.5a.5.5 0 01.71 0l2.5 2.5a.5.5 0 01.12.65l-1.5 2.5a.5.5 0 00.15.74l2.78 1.85a.5.5 0 01.22.46l-.5 3a.5.5 0 01-.22.4l-2.78 1.85a.5.5 0 00-.15.74l1.5 2.5a.5.5 0 01-.12.65l-2.5 2.5a.5.5 0 01-.71 0l-3.5-3.5a.5.5 0 00-.71 0l-2.5 2.5a.5.5 0 01-.71 0l-2.5-2.5a.5.5 0 01-.12-.65l1.5-2.5a.5.5 0 00-.15-.74L4.22 15.9a.5.5 0 01-.22-.4z"></path>
                     </svg>
@@ -92,29 +99,44 @@
             </div>
             <h1>Vérification d'e-mail</h1>
         </div>
-        
+
         <div class="content">
-            <p class="greeting">Bonjour {{ $user->name }},</p>
-            
-            <p class="message">
-                Merci de vous être inscrit sur <strong>TaPrestation</strong> ! Pour finaliser votre inscription et accéder à toutes les fonctionnalités de notre plateforme, veuillez vérifier votre adresse e-mail en cliquant sur le bouton ci-dessous.
+            <p class="greeting">
+                Bonjour {{ $user->name ?? 'Utilisateur' }},
             </p>
-            
-            <div style="text-align: center;">
-                <a href="{{ $url }}" class="button" style="color: white; text-decoration: none;">Vérifier mon adresse e-mail</a>
-            </div>
-            
+
             <p class="message">
-                Si vous n'arrivez pas à cliquer sur le bouton, vous pouvez copier et coller le lien suivant dans votre navigateur :
-                <br>
-                <a href="{{ $url }}" style="color: #1e40af; word-break: break-all;">{{ $url }}</a>
+                Merci de vous être inscrit sur <strong>TaPrestation</strong> !  
+                Pour finaliser votre inscription et accéder à toutes les fonctionnalités de notre plateforme,
+                veuillez vérifier votre adresse e-mail en cliquant sur le bouton ci-dessous.
             </p>
-            
+
+            @if(!empty($url))
+                <div style="text-align: center;">
+                    <a href="{{ $url }}" class="button">
+                        Vérifier mon adresse e-mail
+                    </a>
+                </div>
+
+                <p class="message">
+                    Si vous n'arrivez pas à cliquer sur le bouton, vous pouvez copier et coller le lien suivant
+                    dans votre navigateur :
+                    <br>
+                    <a href="{{ $url }}" style="word-break: break-all;">
+                        {{ $url }}
+                    </a>
+                </p>
+            @else
+                <p class="message" style="color:#b91c1c;">
+                    (Erreur : aucun lien de vérification n'a été généré.)
+                </p>
+            @endif
+
             <p class="message">
                 Si vous n'avez pas créé de compte sur TaPrestation, vous pouvez ignorer cet e-mail.
             </p>
         </div>
-        
+
         <div class="footer">
             <p>© {{ date('Y') }} TaPrestation. Tous droits réservés.</p>
             <p>
