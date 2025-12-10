@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Client;
 use App\Models\Prestataire;
 use App\Models\Category;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -22,7 +23,7 @@ class RegisterController extends Controller
     {
         // Get main categories for the registration form
         $categories = Category::whereNull('parent_id')->orderBy('name')->get();
-        
+
         return view('auth.register', compact('categories'));
     }
 
@@ -44,7 +45,7 @@ class RegisterController extends Controller
             'method' => $request->method(),
             'url' => $request->url()
         ]);
-        
+
         // Validation des champs communs d'abord
         $commonRules = [
             'name' => ['required', 'string', 'min:2', 'max:255', 'regex:/^[\pL\s\-]+$/u'],
@@ -52,7 +53,7 @@ class RegisterController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/'],
             'user_type' => ['required', 'in:client,prestataire'],
         ];
-        
+
         $commonMessages = [
             'name.required' => 'Le nom est obligatoire.',
             'name.min' => 'Le nom doit contenir au moins 2 caractères.',
@@ -67,22 +68,22 @@ class RegisterController extends Controller
             'user_type.required' => 'Vous devez choisir un type de compte.',
             'user_type.in' => 'Le type de compte sélectionné n\'est pas valide.',
         ];
-        
+
         // Validation conditionnelle selon le type d'utilisateur
         if ($request->user_type === 'client') {
             $clientRules = [
                 'location' => ['nullable', 'string', 'max:255'],
                 'client_profile_photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif'],
             ];
-            
+
             $clientMessages = [
                 'location.max' => 'La localisation ne peut pas dépasser 255 caractères.',
                 'client_profile_photo.image' => 'Le fichier doit être une image.',
                 'client_profile_photo.mimes' => 'L\'image doit être au format JPEG, PNG, JPG ou GIF.',
             ];
-            
+
             $request->validate(array_merge($commonRules, $clientRules), array_merge($commonMessages, $clientMessages));
-            
+
         } elseif ($request->user_type === 'prestataire') {
             $prestataireRules = [
                 'company_name' => ['required', 'string', 'min:2', 'max:255'],
@@ -94,7 +95,7 @@ class RegisterController extends Controller
                 'description' => ['nullable', 'string', 'max:500'],
                 'portfolio_url' => ['nullable', 'url', 'max:255'],
             ];
-            
+
             $prestataireMessages = [
                 'company_name.required' => 'Le nom de l\'enseigne est obligatoire.',
                 'company_name.min' => 'Le nom de l\'enseigne doit contenir au moins 2 caractères.',
@@ -114,7 +115,7 @@ class RegisterController extends Controller
                 'portfolio_url.url' => 'Le lien du portfolio doit être une URL valide.',
                 'portfolio_url.max' => 'Le lien du portfolio ne peut pas dépasser 255 caractères.',
             ];
-            
+
             $request->validate(array_merge($commonRules, $prestataireRules), array_merge($commonMessages, $prestataireMessages));
         } else {
             // Validation des champs communs seulement si le type n'est pas reconnu
@@ -150,7 +151,7 @@ class RegisterController extends Controller
             // Get category and subcategory names for secteur_activite and competences
             $category = Category::find($request->category_id);
             $subcategory = Category::find($request->subcategory_id);
-            
+
             Prestataire::create([
                 'user_id' => $user->id,
                 'company_name' => $request->company_name,
@@ -166,6 +167,10 @@ class RegisterController extends Controller
 
         // Connecter automatiquement l'utilisateur après inscription
         auth()->login($user);
+
+        // Dispatch the Registered event (Laravel best practice)
+        // This automatically sends the email verification notification
+        event(new Registered($user));
 
         // Redirect to email verification notice
         return redirect()->route('verification.notice');

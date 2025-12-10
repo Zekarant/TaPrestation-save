@@ -41,6 +41,11 @@ class VideoController extends Controller
         return view('prestataire.videos.create-step1');
     }
 
+    public function record()
+    {
+        return view('prestataire.videos.record');
+    }
+
     public function storeStep1(StoreVideoFileRequest $request)
     {
         $path = null;
@@ -98,10 +103,10 @@ class VideoController extends Controller
             // Clear session data
             $request->session()->forget('video_data');
 
-            // Dispatch the ProcessVideo job with a delay as per project requirements
-            ProcessVideo::dispatch($video)->delay(now()->addSeconds(5));
+            // Dispatch the ProcessVideo job immediately (no delay in sync mode)
+            ProcessVideo::dispatch($video);
 
-            return redirect()->route('prestataire.videos.manage')->with('success', 'Vidéo en cours de traitement. Elle sera disponible dans quelques instants.');
+            return redirect()->route('prestataire.videos.manage')->with('success', 'Vidéo traitée avec succès et disponible dans le feed.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Une erreur est survenue lors de la création de la vidéo: ' . $e->getMessage());
         }

@@ -2,6 +2,7 @@ vendor/
 node_modules/
 .env
 .env.backup
+.env.prod
 .phpunit.cache/
 composer.lock
 package-lock.json
@@ -40,7 +41,6 @@ public/css/
 public/js/
 public/mix-manifest.json
 public/hot
-.env.example
 api_response.json
 *.tmp
 *.temp

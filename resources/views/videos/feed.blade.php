@@ -7,6 +7,14 @@ use Illuminate\Support\Facades\Storage;
 @section('content')
 <!-- Interface TikTok-like plein écran -->
 <div class="fixed inset-0 bg-black overflow-hidden" id="video-container">
+    <!-- Indication de scroll (animée) -->
+    <div id="scroll-indicator" class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50 flex flex-col items-center text-white animate-bounce opacity-70 transition-opacity duration-300">
+        <span class="text-sm mb-2">Swipe pour voir plus</span>
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+        </svg>
+    </div>
+    
     @if($videos->isEmpty())
         <div class="flex items-center justify-center h-full text-white">
             <div class="text-center">
@@ -177,6 +185,28 @@ document.addEventListener('DOMContentLoaded', function() {
     const videoPlayers = document.querySelectorAll('.video-player');
     let currentVideoIndex = 0;
     let isScrolling = false;
+
+    // Gestion de l'indication de scroll
+    const scrollIndicator = document.getElementById('scroll-indicator');
+    let indicatorHidden = false;
+    
+    function hideScrollIndicator() {
+        if (!indicatorHidden && scrollIndicator) {
+            scrollIndicator.style.opacity = '0';
+            indicatorHidden = true;
+            setTimeout(() => {
+                scrollIndicator.style.display = 'none';
+            }, 300);
+        }
+    }
+    
+    // Masquer après le premier scroll
+    if (videosContainer) {
+        videosContainer.addEventListener('scroll', hideScrollIndicator, { once: true });
+    }
+    
+    // Masquer automatiquement après 5 secondes
+    setTimeout(hideScrollIndicator, 5000);
 
     // Video view tracking
     const viewTracking = new Map();

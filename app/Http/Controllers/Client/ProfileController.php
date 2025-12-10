@@ -32,7 +32,6 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         $client = $user->client;
-        
         return view('client.profile.edit', [
             'user' => $user,
             'client' => $client
@@ -49,7 +48,7 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         $client = $user->client;
-        
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => [
@@ -62,7 +61,7 @@ class ProfileController extends Controller
             'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:500',
             'bio' => 'nullable|string|max:1000',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         // Mise à jour des informations utilisateur
@@ -75,23 +74,23 @@ class ProfileController extends Controller
             $client = new Client();
             $client->user_id = $user->id;
         }
-        
+
         $client->phone = $request->phone;
         $client->address = $request->address;
         $client->bio = $request->bio;
-        
+
         // Gestion de la photo
         if ($request->hasFile('photo')) {
             // Supprimer l'ancienne photo si elle existe
             if ($client->photo && Storage::disk('public')->exists($client->photo)) {
                 Storage::disk('public')->delete($client->photo);
             }
-            
+
             // Stocker la nouvelle photo
             $photoPath = $request->file('photo')->store('avatars/clients', 'public');
             $client->photo = $photoPath;
         }
-        
+
         $client->save();
 
         return redirect()->route('client.profile.edit')
@@ -107,7 +106,7 @@ class ProfileController extends Controller
     public function updateSecurity(Request $request)
     {
         $user = Auth::user();
-        
+
         $request->validate([
             'current_password' => 'required|current_password',
             'new_password' => 'required|min:8|confirmed',
@@ -131,7 +130,7 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         $client = $user->client;
-        
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => [
@@ -152,12 +151,12 @@ class ProfileController extends Controller
         // Mise à jour des informations utilisateur
         $user->name = $request->name;
         $user->email = $request->email;
-        
+
         // Mise à jour du mot de passe si fourni
         if ($request->filled('new_password')) {
             $user->password = Hash::make($request->new_password);
         }
-        
+
         $user->save();
 
         // Mise à jour ou création du profil client
@@ -165,23 +164,23 @@ class ProfileController extends Controller
             $client = new Client();
             $client->user_id = $user->id;
         }
-        
+
         $client->phone = $request->phone;
         $client->address = $request->address;
         $client->bio = $request->bio;
-        
+
         // Gestion de la photo
         if ($request->hasFile('photo')) {
             // Supprimer l'ancienne photo si elle existe
             if ($client->photo && Storage::disk('public')->exists($client->photo)) {
                 Storage::disk('public')->delete($client->photo);
             }
-            
+
             // Stocker la nouvelle photo
             $photoPath = $request->file('photo')->store('avatars/clients', 'public');
             $client->photo = $photoPath;
         }
-        
+
         $client->save();
 
         return redirect()->route('client.profile.edit')
@@ -197,13 +196,13 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         $client = $user->client;
-        
+
         // Récupérer les demandes récentes
         $recentRequests = $user->clientRequests()->orderBy('created_at', 'desc')->take(5)->get();
-        
+
         // Récupérer les avis reçus
         $reviews = $client ? $client->reviews()->with(['prestataire.user', 'service'])->latest()->get() : collect([]);
-        
+
         // Statistiques du client
         $stats = [
             'total_requests' => $user->clientRequests()->count(),
@@ -212,7 +211,7 @@ class ProfileController extends Controller
             'average_rating' => $reviews->avg('rating'),
             'member_since' => $user->created_at->format('F Y')
         ];
-        
+
         return view('client.profile.show', [
             'user' => $user,
             'client' => $client,
@@ -231,20 +230,20 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         $client = $user->client;
-        
+
         if ($client && $client->photo) {
             // Supprimer le fichier du stockage
             if (Storage::disk('public')->exists($client->photo)) {
                 Storage::disk('public')->delete($client->photo);
             }
-            
+
             // Mettre à jour la base de données
             $client->photo = null;
             $client->save();
-            
+
             return response()->json(['success' => true, 'message' => 'Photo supprimée avec succès.']);
         }
-        
+
         return response()->json(['success' => false, 'message' => 'Aucune photo à supprimer.']);
     }
 

@@ -14,6 +14,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Prepare Laravel directories
+        run: |
+          mkdir -p storage/framework/views
+          mkdir -p storage/framework/cache
+          mkdir -p storage/logs
+          mkdir -p bootstrap/cache
+          chmod -R 775 storage bootstrap/cache
+
+      - name: Prepare Laravel
+        run: |
+          mkdir -p bootstrap/cache
+          chmod -R 775 bootstrap/cache
+
       # 2️⃣ Installe PHP + Composer
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -44,20 +57,28 @@ jobs:
           php artisan view:cache
 
       # 5️⃣ Upload FTP vers OVH
-      - name: 📤 Deploy to OVH with FTP
+      - name: Deploy to OVH via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftps
+          protocol: ftp          # ou ftp si FTPS non supporté
           port: ${{ secrets.FTP_PORT }}
+          local-dir: ./           # le dossier à déployer
           server-dir: ${{ secrets.FTP_PATH }}
           exclude: |
-            **/.git*
-            **/.github*
-            **/node_modules/**
-            **/tests/**
-            **/storage/logs/**
-            **/storage/framework/cache/**
-            **/.env
+              .git*
+              .github*
+              node_modules/**
+              tests/**
+              storage/logs/**
+              storage/framework/cache/**
+              .env
+              vendor/**
+              composer.lock
+              package-lock.json
+              yarn.lock
+              phpunit.xml
+
+
