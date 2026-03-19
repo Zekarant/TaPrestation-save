@@ -1,0 +1,14 @@
+{
+  "name": "TaPrestation",
+  "shortName": "TaP",
+  "startUrl": "/",
+  "scope": "/",
+  "display": "standalone",
+  "backgroundColor": "#f8fafc",
+  "themeColor": "#1e293b",
+  "host": "https://taprestation.com",
+  "launcherName": "TaPrestation",
+  "maskableForeground": "public/icons/icon-512x512.png",
+  "maskableBackground": "#07172f",
+  "icon": "public/icons/icon-512x512.png"
+}

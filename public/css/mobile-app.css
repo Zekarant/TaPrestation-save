@@ -1,0 +1,228 @@
+/* Mobile App Styles - Enhanced Ergonomics */
+
+/* Safe area pour iPhone X+ et appareils avec encoche */
+body {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Touch highlight désactivé pour une sensation native */
+* {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+/* Prevent pull-to-refresh sur iOS (sauf si nécessaire) */
+body.no-pull-refresh {
+    overscroll-behavior-y: contain;
+}
+
+@media (max-width: 768px) {
+	body {
+		font-size: 15px;
+		line-height: 1.5;
+	}
+
+	main,
+	.container,
+	.max-w-6xl,
+	.max-w-7xl {
+		padding-left: 12px !important;
+		padding-right: 12px !important;
+	}
+
+	h1 {
+		font-size: 1.5rem;
+		margin-bottom: 0.75rem;
+	}
+	h2 {
+		font-size: 1.25rem;
+		margin-bottom: 0.5rem;
+	}
+	h3 {
+		font-size: 1.1rem;
+		margin-bottom: 0.4rem;
+	}
+
+	/* Cartes avec padding raisonnable (exclure la navbar) */
+	.bg-white.rounded-xl:not(#site-navbar),
+	.bg-white.rounded-lg:not(#site-navbar),
+	.bg-white.shadow-sm:not(nav#site-navbar):not(#site-navbar),
+	.card:not(#site-navbar) {
+		padding: 14px !important;
+		margin-bottom: 12px;
+		border-radius: 12px;
+	}
+
+	/* Garantir que la navbar garde son styling natif */
+	#site-navbar,
+	nav#site-navbar {
+		padding: 0 !important;
+		margin-bottom: 0 !important;
+		border-radius: 0 !important;
+	}
+
+	/* Tables lisibles */
+	table {
+		font-size: 13px;
+	}
+	table th,
+	table td {
+		padding: 10px 12px;
+	}
+	.overflow-x-auto,
+	.table-responsive {
+		-webkit-overflow-scrolling: touch;
+	}
+
+	/* Boutons cliquables - taille tactile minimale */
+	button,
+	.btn,
+	a.btn,
+	.px-6.py-3,
+	.px-4.py-3,
+	.px-4.py-2 {
+		min-height: 44px;
+		padding: 0.7rem 1rem !important;
+		font-size: 0.95rem !important;
+	}
+
+	/* Grilles avec gap raisonnable */
+	.grid {
+		gap: 0.75rem;
+	}
+
+	/* Cartes de statistiques bien proportionnées */
+	.square-card,
+	.stat-card,
+	.dashboard-stat-card {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 14px !important;
+		border-radius: 12px;
+		font-size: 0.95rem;
+		min-height: auto;
+	}
+
+	.square-card > div,
+	.square-card .flex,
+	.stat-card > div,
+	.stat-card .flex {
+		width: 100%;
+	}
+
+	/* Icônes de taille lisible */
+	.stat-card svg,
+	.stat-card i,
+	.square-card svg,
+	.square-card i,
+	.dashboard-stat-card svg {
+		width: 1.75rem;
+		height: 1.75rem;
+		font-size: 1.25rem;
+		margin-bottom: 0.4rem;
+	}
+
+	/* Padding interne des cartes */
+	.stat-card .p-3,
+	.stat-card .rounded-full,
+	.square-card .p-3,
+	.square-card .rounded-full {
+		padding: 8px !important;
+	}
+
+	/* Marges des conteneurs */
+	.stat-card .ml-4,
+	.square-card .ml-4 {
+		margin-left: 0.75rem !important;
+	}
+
+	/* Responsive grids */
+	.grid-cols-1 {
+		grid-template-columns: 1fr;
+	}
+	
+	.md\:grid-cols-2 {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+	
+	.md\:grid-cols-3 {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+	
+	.md\:grid-cols-4 {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	/* Form inputs touchables */
+	input[type="text"],
+	input[type="email"],
+	input[type="password"],
+	input[type="number"],
+	input[type="tel"],
+	input[type="search"],
+	input[type="date"],
+	textarea,
+	select {
+		min-height: 48px;
+		font-size: 16px; /* Empêche le zoom auto sur iOS */
+		padding: 12px 14px;
+	}
+
+	/* Boutons sticky en bas pour actions importantes */
+	.form-actions-sticky {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		background: white;
+		padding: 12px 16px;
+		padding-bottom: calc(12px + env(safe-area-inset-bottom));
+		box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+		z-index: 100;
+		display: flex;
+		gap: 12px;
+	}
+
+	.form-actions-sticky button,
+	.form-actions-sticky .btn {
+		flex: 1;
+	}
+
+	/* Pagination mobile */
+	.pagination {
+		flex-wrap: wrap;
+		gap: 6px;
+	}
+
+	.pagination a,
+	.pagination span {
+		min-width: 40px;
+		min-height: 40px;
+		padding: 8px 12px;
+	}
+
+	/* Modals plein écran sur mobile */
+	.modal,
+	[x-show*="modal"],
+	[x-data*="modal"] > div[x-show] {
+		max-width: 100vw !important;
+		max-height: 100vh !important;
+		border-radius: 0 !important;
+		margin: 0 !important;
+	}
+
+	/* Dropdown menus */
+	.dropdown-menu,
+	[x-show*="dropdown"] {
+		min-width: 200px;
+		max-width: calc(100vw - 32px);
+	}
+
+	/* Bottom navigation spacing */
+	main {
+		padding-bottom: 80px !important;
+	}
+}

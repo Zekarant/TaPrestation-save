@@ -1,0 +1,1264 @@
+/**
+ * TAPRESTATION - DESIGN SYSTEM UNIFIÉ
+ * ====================================
+ * Version 2.0 - Cohérence visuelle globale
+ * 
+ * Ce fichier unifie le design de TOUTES les pages.
+ * Inclure dans app.blade.php APRÈS global-ergonomics.css
+ */
+
+/* ============================================
+   SECTION 1: PALETTE DE COULEURS UNIFIÉE
+   ============================================ */
+
+:root {
+    /* Couleur principale - Bleu TaPrestation */
+    --ta-primary: #3b82f6;
+    --ta-primary-light: #60a5fa;
+    --ta-primary-dark: #2563eb;
+    --ta-primary-50: #eff6ff;
+    --ta-primary-100: #dbeafe;
+    
+    /* Couleurs secondaires */
+    --ta-indigo: #6366f1;
+    --ta-purple: #8b5cf6;
+    --ta-violet: #7c3aed;
+    
+    /* Couleurs d'état */
+    --ta-success: #10b981;
+    --ta-success-light: #34d399;
+    --ta-success-dark: #059669;
+    --ta-success-50: #ecfdf5;
+    
+    --ta-warning: #f59e0b;
+    --ta-warning-light: #fbbf24;
+    --ta-warning-dark: #d97706;
+    --ta-warning-50: #fffbeb;
+    
+    --ta-danger: #ef4444;
+    --ta-danger-light: #f87171;
+    --ta-danger-dark: #dc2626;
+    --ta-danger-50: #fef2f2;
+    
+    --ta-info: #0ea5e9;
+    --ta-info-light: #38bdf8;
+    --ta-info-dark: #0284c7;
+    
+    /* Couleurs de section */
+    --ta-food: #f97316;
+    --ta-equipment: #8b5cf6;
+    --ta-services: #3b82f6;
+    --ta-tenders: #10b981;
+    --ta-videos: #ec4899;
+    --ta-urgent: #ef4444;
+    
+    /* Gris neutres */
+    --ta-gray-50: #f8fafc;
+    --ta-gray-100: #f1f5f9;
+    --ta-gray-200: #e2e8f0;
+    --ta-gray-300: #cbd5e1;
+    --ta-gray-400: #94a3b8;
+    --ta-gray-500: #64748b;
+    --ta-gray-600: #475569;
+    --ta-gray-700: #334155;
+    --ta-gray-800: #1e293b;
+    --ta-gray-900: #0f172a;
+    
+    /* Typographie */
+    --ta-font: 'Figtree', 'Inter', system-ui, -apple-system, sans-serif;
+    
+    /* Espacements unifiés */
+    --ta-space-1: 0.25rem;  /* 4px */
+    --ta-space-2: 0.5rem;   /* 8px */
+    --ta-space-3: 0.75rem;  /* 12px */
+    --ta-space-4: 1rem;     /* 16px */
+    --ta-space-5: 1.25rem;  /* 20px */
+    --ta-space-6: 1.5rem;   /* 24px */
+    --ta-space-8: 2rem;     /* 32px */
+    
+    /* Border radius unifiés */
+    --ta-radius-sm: 0.375rem;  /* 6px */
+    --ta-radius-md: 0.5rem;    /* 8px */
+    --ta-radius-lg: 0.75rem;   /* 12px */
+    --ta-radius-xl: 1rem;      /* 16px */
+    --ta-radius-2xl: 1.5rem;   /* 24px */
+    --ta-radius-full: 9999px;
+    
+    /* Ombres unifiées */
+    --ta-shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+    --ta-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px -1px rgba(0,0,0,0.1);
+    --ta-shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+    --ta-shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
+    --ta-shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+}
+
+/* ============================================
+   SECTION 2: COMPOSANTS DE BASE UNIFIÉS
+   ============================================ */
+
+/* === CARTES STANDARD === */
+.ta-card {
+    background: white;
+    border-radius: var(--ta-radius-xl);
+    box-shadow: var(--ta-shadow);
+    border: 1px solid var(--ta-gray-100);
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+.ta-card:hover {
+    box-shadow: var(--ta-shadow-md);
+}
+
+.ta-card-header {
+    padding: var(--ta-space-4) var(--ta-space-5);
+    border-bottom: 1px solid var(--ta-gray-100);
+    background: var(--ta-gray-50);
+}
+
+.ta-card-body {
+    padding: var(--ta-space-5);
+}
+
+.ta-card-footer {
+    padding: var(--ta-space-4) var(--ta-space-5);
+    border-top: 1px solid var(--ta-gray-100);
+    background: var(--ta-gray-50);
+}
+
+/* === CARTES AVEC ACCENT COLORÉ === */
+.ta-card-accent {
+    position: relative;
+    background: white;
+    border-radius: var(--ta-radius-xl);
+    box-shadow: var(--ta-shadow);
+    overflow: hidden;
+}
+
+.ta-card-accent::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--accent-color, var(--ta-primary));
+}
+
+.ta-card-accent.primary::before { background: var(--ta-primary); }
+.ta-card-accent.success::before { background: var(--ta-success); }
+.ta-card-accent.warning::before { background: var(--ta-warning); }
+.ta-card-accent.danger::before { background: var(--ta-danger); }
+.ta-card-accent.food::before { background: var(--ta-food); }
+.ta-card-accent.equipment::before { background: var(--ta-equipment); }
+
+/* === CARTES STATISTIQUES === */
+.ta-stat-card {
+    background: white;
+    border-radius: var(--ta-radius-xl);
+    padding: var(--ta-space-5);
+    box-shadow: var(--ta-shadow);
+    border: 1px solid var(--ta-gray-100);
+    display: flex;
+    align-items: center;
+    gap: var(--ta-space-4);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.ta-stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--ta-shadow-lg);
+}
+
+.ta-stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--ta-radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.ta-stat-icon.primary { background: var(--ta-primary-100); color: var(--ta-primary); }
+.ta-stat-icon.success { background: var(--ta-success-50); color: var(--ta-success); }
+.ta-stat-icon.warning { background: var(--ta-warning-50); color: var(--ta-warning); }
+.ta-stat-icon.danger { background: var(--ta-danger-50); color: var(--ta-danger); }
+.ta-stat-icon.food { background: #fff7ed; color: var(--ta-food); }
+.ta-stat-icon.equipment { background: #f5f3ff; color: var(--ta-equipment); }
+
+.ta-stat-content {
+    flex: 1;
+}
+
+.ta-stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--ta-gray-900);
+    line-height: 1.2;
+}
+
+.ta-stat-label {
+    font-size: 0.875rem;
+    color: var(--ta-gray-500);
+    margin-top: 2px;
+}
+
+/* ============================================
+   SECTION 3: BOUTONS UNIFIÉS
+   ============================================ */
+
+.ta-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: var(--ta-radius-lg);
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.ta-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Bouton primaire */
+.ta-btn-primary {
+    background: var(--ta-primary);
+    color: white;
+}
+.ta-btn-primary:hover:not(:disabled) {
+    background: var(--ta-primary-dark);
+    transform: translateY(-1px);
+    box-shadow: var(--ta-shadow-md);
+}
+
+/* Bouton succès */
+.ta-btn-success {
+    background: var(--ta-success);
+    color: white;
+}
+.ta-btn-success:hover:not(:disabled) {
+    background: var(--ta-success-dark);
+    transform: translateY(-1px);
+}
+
+/* Bouton danger */
+.ta-btn-danger {
+    background: var(--ta-danger);
+    color: white;
+}
+.ta-btn-danger:hover:not(:disabled) {
+    background: var(--ta-danger-dark);
+    transform: translateY(-1px);
+}
+
+/* Bouton warning */
+.ta-btn-warning {
+    background: var(--ta-warning);
+    color: white;
+}
+.ta-btn-warning:hover:not(:disabled) {
+    background: var(--ta-warning-dark);
+    transform: translateY(-1px);
+}
+
+/* Bouton outline */
+.ta-btn-outline {
+    background: transparent;
+    border: 2px solid var(--ta-gray-300);
+    color: var(--ta-gray-700);
+}
+.ta-btn-outline:hover:not(:disabled) {
+    border-color: var(--ta-primary);
+    color: var(--ta-primary);
+    background: var(--ta-primary-50);
+}
+
+/* Bouton ghost */
+.ta-btn-ghost {
+    background: transparent;
+    color: var(--ta-gray-600);
+}
+.ta-btn-ghost:hover:not(:disabled) {
+    background: var(--ta-gray-100);
+    color: var(--ta-gray-800);
+}
+
+/* Tailles de boutons */
+.ta-btn-sm {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;
+}
+
+.ta-btn-lg {
+    padding: 0.875rem 1.75rem;
+    font-size: 1rem;
+}
+
+.ta-btn-xl {
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+}
+
+/* Boutons avec icônes de section */
+.ta-btn-food { background: var(--ta-food); color: white; }
+.ta-btn-equipment { background: var(--ta-equipment); color: white; }
+.ta-btn-services { background: var(--ta-services); color: white; }
+.ta-btn-tenders { background: var(--ta-tenders); color: white; }
+.ta-btn-videos { background: var(--ta-videos); color: white; }
+
+/* ============================================
+   SECTION 4: BADGES & TAGS UNIFIÉS
+   ============================================ */
+
+.ta-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border-radius: var(--ta-radius-full);
+    white-space: nowrap;
+}
+
+.ta-badge-primary { background: var(--ta-primary-100); color: var(--ta-primary-dark); }
+.ta-badge-success { background: var(--ta-success-50); color: var(--ta-success-dark); }
+.ta-badge-warning { background: var(--ta-warning-50); color: var(--ta-warning-dark); }
+.ta-badge-danger { background: var(--ta-danger-50); color: var(--ta-danger-dark); }
+.ta-badge-gray { background: var(--ta-gray-100); color: var(--ta-gray-600); }
+
+/* Tags de statut */
+.ta-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: var(--ta-radius-md);
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+.ta-status-pending { background: #fef3c7; color: #92400e; }
+.ta-status-confirmed { background: #d1fae5; color: #065f46; }
+.ta-status-completed { background: #dbeafe; color: #1e40af; }
+.ta-status-cancelled { background: #fee2e2; color: #991b1b; }
+.ta-status-active { background: #d1fae5; color: #065f46; }
+.ta-status-inactive { background: var(--ta-gray-100); color: var(--ta-gray-600); }
+
+/* ============================================
+   SECTION 5: FORMULAIRES UNIFIÉS
+   ============================================ */
+
+.ta-input,
+.ta-select,
+.ta-textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 0.9375rem;
+    border: 1px solid var(--ta-gray-300);
+    border-radius: var(--ta-radius-lg);
+    background: white;
+    color: var(--ta-gray-900);
+    transition: all 0.2s ease;
+}
+
+.ta-input:focus,
+.ta-select:focus,
+.ta-textarea:focus {
+    outline: none;
+    border-color: var(--ta-primary);
+    box-shadow: 0 0 0 3px var(--ta-primary-100);
+}
+
+.ta-input::placeholder,
+.ta-textarea::placeholder {
+    color: var(--ta-gray-400);
+}
+
+.ta-input-error {
+    border-color: var(--ta-danger);
+}
+
+.ta-input-error:focus {
+    box-shadow: 0 0 0 3px var(--ta-danger-50);
+}
+
+.ta-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--ta-gray-700);
+    margin-bottom: 0.5rem;
+}
+
+.ta-error-text {
+    font-size: 0.8125rem;
+    color: var(--ta-danger);
+    margin-top: 0.375rem;
+}
+
+.ta-help-text {
+    font-size: 0.8125rem;
+    color: var(--ta-gray-500);
+    margin-top: 0.375rem;
+}
+
+/* Groupe de formulaire */
+.ta-form-group {
+    margin-bottom: var(--ta-space-5);
+}
+
+/* ============================================
+   SECTION 6: HEADERS DE PAGE UNIFIÉS
+   ============================================ */
+
+.ta-page-header {
+    background: linear-gradient(135deg, var(--ta-gray-800) 0%, var(--ta-gray-900) 100%);
+    color: white;
+    padding: var(--ta-space-6) 0;
+    margin-bottom: var(--ta-space-6);
+}
+
+.ta-page-header.primary {
+    background: linear-gradient(135deg, var(--ta-primary) 0%, var(--ta-primary-dark) 100%);
+}
+
+.ta-page-header.gradient-blue {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.ta-page-header.food {
+    background: linear-gradient(135deg, var(--ta-food) 0%, #ea580c 100%);
+}
+
+.ta-page-header.equipment {
+    background: linear-gradient(135deg, var(--ta-equipment) 0%, #7c3aed 100%);
+}
+
+.ta-page-header.tenders {
+    background: linear-gradient(135deg, var(--ta-tenders) 0%, #059669 100%);
+}
+
+.ta-page-title {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 700;
+    margin: 0;
+}
+
+.ta-page-subtitle {
+    font-size: 0.9375rem;
+    opacity: 0.9;
+    margin-top: 0.5rem;
+}
+
+.ta-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    opacity: 0.8;
+    margin-bottom: var(--ta-space-3);
+}
+
+.ta-breadcrumb a {
+    color: inherit;
+    opacity: 0.8;
+    text-decoration: none;
+}
+
+.ta-breadcrumb a:hover {
+    opacity: 1;
+}
+
+/* ============================================
+   SECTION 7: NAVIGATION & TABS UNIFIÉS
+   ============================================ */
+
+.ta-tabs {
+    display: flex;
+    gap: 0.25rem;
+    background: var(--ta-gray-100);
+    padding: 0.25rem;
+    border-radius: var(--ta-radius-lg);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.ta-tab {
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--ta-gray-600);
+    background: transparent;
+    border: none;
+    border-radius: var(--ta-radius-md);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+
+.ta-tab:hover {
+    color: var(--ta-gray-800);
+    background: var(--ta-gray-200);
+}
+
+.ta-tab.active {
+    background: white;
+    color: var(--ta-primary);
+    box-shadow: var(--ta-shadow-sm);
+}
+
+/* Pills navigation */
+.ta-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.ta-pill {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--ta-gray-600);
+    background: var(--ta-gray-100);
+    border: none;
+    border-radius: var(--ta-radius-full);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.ta-pill:hover {
+    background: var(--ta-gray-200);
+}
+
+.ta-pill.active {
+    background: var(--ta-primary);
+    color: white;
+}
+
+/* ============================================
+   SECTION 8: LISTES & ITEMS UNIFIÉS
+   ============================================ */
+
+.ta-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.ta-list-item {
+    display: flex;
+    align-items: center;
+    gap: var(--ta-space-4);
+    padding: var(--ta-space-4);
+    background: white;
+    border-radius: var(--ta-radius-lg);
+    border: 1px solid var(--ta-gray-100);
+    transition: all 0.2s ease;
+}
+
+.ta-list-item:hover {
+    border-color: var(--ta-gray-200);
+    box-shadow: var(--ta-shadow-sm);
+}
+
+.ta-list-item-clickable {
+    cursor: pointer;
+}
+
+.ta-list-item-clickable:hover {
+    background: var(--ta-gray-50);
+    border-color: var(--ta-primary-100);
+}
+
+/* ============================================
+   SECTION 9: GRILLES RESPONSIVE UNIFIÉES
+   ============================================ */
+
+.ta-grid {
+    display: grid;
+    gap: var(--ta-space-5);
+}
+
+.ta-grid-2 { grid-template-columns: repeat(2, 1fr); }
+.ta-grid-3 { grid-template-columns: repeat(3, 1fr); }
+.ta-grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+/* Responsive grids */
+@media (max-width: 1024px) {
+    .ta-grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .ta-grid-3 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+    .ta-grid-4 { grid-template-columns: 1fr; }
+    .ta-grid-3 { grid-template-columns: 1fr; }
+    .ta-grid-2 { grid-template-columns: 1fr; }
+}
+
+/* Auto-fit grids */
+.ta-grid-auto-sm { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.ta-grid-auto-md { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.ta-grid-auto-lg { grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); }
+
+/* ============================================
+   SECTION 10: ALERTES & NOTIFICATIONS
+   ============================================ */
+
+.ta-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--ta-space-3);
+    padding: var(--ta-space-4);
+    border-radius: var(--ta-radius-lg);
+    font-size: 0.9375rem;
+}
+
+.ta-alert-icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+}
+
+.ta-alert-info {
+    background: var(--ta-primary-50);
+    color: var(--ta-primary-dark);
+    border: 1px solid var(--ta-primary-100);
+}
+
+.ta-alert-success {
+    background: var(--ta-success-50);
+    color: var(--ta-success-dark);
+    border: 1px solid #a7f3d0;
+}
+
+.ta-alert-warning {
+    background: var(--ta-warning-50);
+    color: #92400e;
+    border: 1px solid #fde68a;
+}
+
+.ta-alert-danger {
+    background: var(--ta-danger-50);
+    color: var(--ta-danger-dark);
+    border: 1px solid #fecaca;
+}
+
+/* ============================================
+   SECTION 11: EMPTY STATES
+   ============================================ */
+
+.ta-empty {
+    text-align: center;
+    padding: var(--ta-space-8) var(--ta-space-4);
+}
+
+.ta-empty-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto var(--ta-space-4);
+    color: var(--ta-gray-300);
+}
+
+.ta-empty-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--ta-gray-700);
+    margin-bottom: var(--ta-space-2);
+}
+
+.ta-empty-text {
+    font-size: 0.9375rem;
+    color: var(--ta-gray-500);
+    margin-bottom: var(--ta-space-5);
+}
+
+/* ============================================
+   SECTION 12: MODALES
+   ============================================ */
+
+.ta-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--ta-space-4);
+    z-index: 50;
+}
+
+.ta-modal {
+    background: white;
+    border-radius: var(--ta-radius-xl);
+    box-shadow: var(--ta-shadow-xl);
+    max-width: 500px;
+    width: 100%;
+    max-height: 90vh;
+    overflow: hidden;
+}
+
+.ta-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--ta-space-4) var(--ta-space-5);
+    border-bottom: 1px solid var(--ta-gray-100);
+}
+
+.ta-modal-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--ta-gray-900);
+}
+
+.ta-modal-close {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--ta-radius-md);
+    color: var(--ta-gray-400);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.ta-modal-close:hover {
+    background: var(--ta-gray-100);
+    color: var(--ta-gray-600);
+}
+
+.ta-modal-body {
+    padding: var(--ta-space-5);
+    overflow-y: auto;
+}
+
+.ta-modal-footer {
+    display: flex;
+    gap: var(--ta-space-3);
+    justify-content: flex-end;
+    padding: var(--ta-space-4) var(--ta-space-5);
+    border-top: 1px solid var(--ta-gray-100);
+    background: var(--ta-gray-50);
+}
+
+/* ============================================
+   SECTION 13: LOADING STATES
+   ============================================ */
+
+.ta-skeleton {
+    background: linear-gradient(90deg, var(--ta-gray-200) 25%, var(--ta-gray-100) 50%, var(--ta-gray-200) 75%);
+    background-size: 200% 100%;
+    animation: ta-shimmer 1.5s infinite;
+    border-radius: var(--ta-radius-md);
+}
+
+@keyframes ta-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.ta-spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid var(--ta-gray-200);
+    border-top-color: var(--ta-primary);
+    border-radius: 50%;
+    animation: ta-spin 0.8s linear infinite;
+}
+
+@keyframes ta-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ============================================
+   SECTION 14: AVATARS
+   ============================================ */
+
+.ta-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.ta-avatar-sm { width: 32px; height: 32px; }
+.ta-avatar-lg { width: 56px; height: 56px; }
+.ta-avatar-xl { width: 80px; height: 80px; }
+
+.ta-avatar-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ta-primary-100);
+    color: var(--ta-primary);
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.ta-avatar-xl.ta-avatar-placeholder { font-size: 1.5rem; }
+
+/* ============================================
+   SECTION 15: PRIX & MONTANTS
+   ============================================ */
+
+.ta-price {
+    font-weight: 700;
+    color: var(--ta-gray-900);
+}
+
+.ta-price-lg {
+    font-size: 1.5rem;
+}
+
+.ta-price-xl {
+    font-size: 2rem;
+}
+
+.ta-price-strike {
+    text-decoration: line-through;
+    color: var(--ta-gray-400);
+    font-weight: 400;
+}
+
+.ta-price-discount {
+    color: var(--ta-danger);
+}
+
+.ta-price-success {
+    color: var(--ta-success);
+}
+
+/* ============================================
+   SECTION 16: MOBILE OPTIMIZATIONS
+   ============================================ */
+
+@media (max-width: 640px) {
+    /* Espacements compacts sur mobile */
+    .ta-card-body {
+        padding: var(--ta-space-4);
+    }
+    
+    .ta-page-header {
+        padding: var(--ta-space-4) 0;
+        margin-bottom: var(--ta-space-4);
+    }
+    
+    .ta-page-title {
+        font-size: 1.25rem;
+    }
+    
+    /* Stat cards en colonnes sur mobile */
+    .ta-stat-card {
+        padding: var(--ta-space-4);
+    }
+    
+    .ta-stat-icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .ta-stat-value {
+        font-size: 1.25rem;
+    }
+    
+    /* Boutons full width sur mobile */
+    .ta-btn-mobile-full {
+        width: 100%;
+    }
+    
+    /* Modal plein écran sur mobile */
+    .ta-modal {
+        max-width: 100%;
+        max-height: 100%;
+        border-radius: 0;
+        height: 100%;
+    }
+    
+    /* Tabs scrollables */
+    .ta-tabs {
+        padding-bottom: 0.5rem;
+    }
+    
+    /* Liste compacte */
+    .ta-list-item {
+        padding: var(--ta-space-3);
+    }
+}
+
+/* ============================================
+   SECTION 17: DARK MODE SUPPORT (optionnel)
+   ============================================ */
+
+@media (prefers-color-scheme: dark) {
+    /* Prêt pour dark mode si nécessaire */
+}
+
+/* ============================================
+   SECTION 18: UTILITIES
+   ============================================ */
+
+/* Texte */
+.ta-text-muted { color: var(--ta-gray-500); }
+.ta-text-primary { color: var(--ta-primary); }
+.ta-text-success { color: var(--ta-success); }
+.ta-text-danger { color: var(--ta-danger); }
+.ta-text-warning { color: var(--ta-warning); }
+
+/* Backgrounds */
+.ta-bg-primary { background: var(--ta-primary); }
+.ta-bg-success { background: var(--ta-success); }
+.ta-bg-danger { background: var(--ta-danger); }
+.ta-bg-warning { background: var(--ta-warning); }
+.ta-bg-gray-50 { background: var(--ta-gray-50); }
+.ta-bg-gray-100 { background: var(--ta-gray-100); }
+
+/* Flexbox helpers */
+.ta-flex { display: flex; }
+.ta-flex-col { flex-direction: column; }
+.ta-items-center { align-items: center; }
+.ta-justify-between { justify-content: space-between; }
+.ta-gap-2 { gap: var(--ta-space-2); }
+.ta-gap-3 { gap: var(--ta-space-3); }
+.ta-gap-4 { gap: var(--ta-space-4); }
+
+/* Margin/Padding */
+.ta-mt-4 { margin-top: var(--ta-space-4); }
+.ta-mb-4 { margin-bottom: var(--ta-space-4); }
+.ta-p-4 { padding: var(--ta-space-4); }
+.ta-p-5 { padding: var(--ta-space-5); }
+
+/* Borders */
+.ta-border { border: 1px solid var(--ta-gray-200); }
+.ta-rounded-lg { border-radius: var(--ta-radius-lg); }
+.ta-rounded-xl { border-radius: var(--ta-radius-xl); }
+
+/* ============================================
+   SECTION 19: SECTION ICONS UNIFORMES
+   ============================================ */
+
+.ta-section-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--ta-radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+}
+
+.ta-section-icon.services { background: linear-gradient(135deg, var(--ta-services), #2563eb); color: white; }
+.ta-section-icon.equipment { background: linear-gradient(135deg, var(--ta-equipment), #7c3aed); color: white; }
+.ta-section-icon.food { background: linear-gradient(135deg, var(--ta-food), #ea580c); color: white; }
+.ta-section-icon.tenders { background: linear-gradient(135deg, var(--ta-tenders), #059669); color: white; }
+.ta-section-icon.videos { background: linear-gradient(135deg, var(--ta-videos), #db2777); color: white; }
+.ta-section-icon.urgent { background: linear-gradient(135deg, var(--ta-urgent), #dc2626); color: white; }
+
+/* ============================================
+   SECTION 20: HARMONISATION GLOBALE AUTOMATIQUE
+   Styles appliqués automatiquement aux pages existantes
+   ============================================ */
+
+/* --- Typographie unifiée --- */
+body {
+    font-family: var(--ta-font);
+}
+
+/* --- Cartes Tailwind améliorées --- */
+.bg-white.rounded-xl,
+.bg-white.rounded-2xl,
+.bg-white.rounded-lg {
+    box-shadow: var(--ta-shadow);
+    border: 1px solid var(--ta-gray-100);
+    transition: all 0.2s ease;
+}
+
+.bg-white.shadow-lg {
+    box-shadow: var(--ta-shadow-lg);
+}
+
+.bg-white.shadow-xl {
+    box-shadow: var(--ta-shadow-xl);
+}
+
+/* --- Headers de page avec gradient --- */
+.bg-gradient-to-r.from-indigo-600,
+.bg-gradient-to-r.from-purple-600,
+.bg-gradient-to-r.from-blue-600,
+.bg-gradient-to-br.from-indigo-500,
+.bg-gradient-to-br.from-slate-800 {
+    color: white;
+}
+
+/* --- Boutons plus cohérents --- */
+.bg-indigo-600,
+.bg-blue-600,
+.bg-purple-600 {
+    transition: all 0.2s ease;
+}
+
+.bg-indigo-600:hover,
+.bg-blue-600:hover,
+.bg-purple-600:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--ta-shadow-md);
+}
+
+/* --- Badges et statuts --- */
+.inline-flex.items-center.px-3.py-1.rounded-full {
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}
+
+/* --- Tables améliorées --- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table thead th {
+    background: var(--ta-gray-50);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ta-gray-500);
+}
+
+table tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+table tbody tr:hover {
+    background-color: var(--ta-gray-50);
+}
+
+/* --- Inputs et formulaires --- */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+input[type="url"],
+input[type="date"],
+input[type="datetime-local"],
+textarea,
+select {
+    border-radius: var(--ta-radius-lg);
+    border: 1px solid var(--ta-gray-300);
+    padding: 0.75rem 1rem;
+    transition: all 0.2s ease;
+    font-size: 0.9375rem;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--ta-primary);
+    box-shadow: 0 0 0 3px var(--ta-primary-100);
+}
+
+/* --- Labels de formulaire --- */
+label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--ta-gray-700);
+}
+
+/* --- Alertes et notifications cohérentes --- */
+.bg-green-100,
+.bg-emerald-100 {
+    border: 1px solid #a7f3d0;
+}
+
+.bg-red-100,
+.bg-rose-100 {
+    border: 1px solid #fecaca;
+}
+
+.bg-yellow-100,
+.bg-amber-100 {
+    border: 1px solid #fde68a;
+}
+
+.bg-blue-100,
+.bg-indigo-100 {
+    border: 1px solid #bfdbfe;
+}
+
+/* --- Liens --- */
+a.text-indigo-600,
+a.text-blue-600 {
+    transition: color 0.15s ease;
+}
+
+a.text-indigo-600:hover,
+a.text-blue-600:hover {
+    color: var(--ta-primary-dark);
+}
+
+/* --- Stat cards améliorées (pour pages existantes) --- */
+.bg-white.rounded-2xl.p-5,
+.bg-white.rounded-xl.p-5,
+.bg-white.rounded-xl.p-4 {
+    transition: all 0.3s ease;
+}
+
+.bg-white.rounded-2xl.p-5:hover,
+.bg-white.rounded-xl.p-5:hover,
+.bg-white.rounded-xl.p-4:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--ta-shadow-lg);
+}
+
+/* --- Icons dans stat cards --- */
+.w-8.h-8.rounded-lg,
+.w-10.h-10.rounded-xl,
+.w-12.h-12.rounded-xl {
+    transition: transform 0.2s ease;
+}
+
+.bg-white.rounded-2xl:hover .w-8.h-8.rounded-lg,
+.bg-white.rounded-xl:hover .w-10.h-10.rounded-xl,
+.bg-white.rounded-xl:hover .w-12.h-12.rounded-xl {
+    transform: scale(1.1);
+}
+
+/* --- Grids responsifs améliorés --- */
+.grid.grid-cols-2.md\:grid-cols-4,
+.grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3 {
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .grid.grid-cols-2.md\:grid-cols-4,
+    .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3 {
+        gap: 1.25rem;
+    }
+}
+
+/* --- Prix et montants --- */
+.text-2xl.font-bold,
+.text-3xl.font-bold {
+    letter-spacing: -0.02em;
+}
+
+/* ============================================
+   SECTION 21: MOBILE HARMONISATION
+   ============================================ */
+
+@media (max-width: 640px) {
+    /* Titres compacts sur mobile */
+    h1.text-3xl {
+        font-size: 1.5rem !important;
+    }
+    
+    h2.text-2xl {
+        font-size: 1.25rem !important;
+    }
+    
+    /* Padding réduit pour les cartes */
+    .px-6, .px-8 {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+    
+    .py-6, .py-8 {
+        padding-top: 1.25rem !important;
+        padding-bottom: 1.25rem !important;
+    }
+    
+    /* Stats cards compactes */
+    .bg-white.rounded-2xl.p-5,
+    .bg-white.rounded-xl.p-5 {
+        padding: 1rem !important;
+    }
+    
+    /* Texte stats */
+    .text-2xl.font-bold {
+        font-size: 1.25rem !important;
+    }
+    
+    .text-3xl.font-bold {
+        font-size: 1.5rem !important;
+    }
+    
+    /* Boutons pleine largeur */
+    .inline-flex.items-center.px-4.py-2 {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    /* Grilles adaptatives */
+    .grid.grid-cols-2 {
+        grid-template-columns: 1fr !important;
+    }
+    
+    /* Espacement réduit entre les grilles */
+    .gap-4, .gap-6, .gap-8 {
+        gap: 0.75rem !important;
+    }
+    
+    /* Tables responsives */
+    table {
+        font-size: 0.8125rem;
+    }
+    
+    table th, table td {
+        padding: 0.5rem !important;
+    }
+}
+
+/* ============================================
+   SECTION 22: PRINT STYLES
+   ============================================ */
+
+@media print {
+    /* Cacher les éléments non imprimables */
+    nav, 
+    footer,
+    .no-print,
+    button:not(.print-btn),
+    a.inline-flex {
+        display: none !important;
+    }
+    
+    /* Cartes sans ombre à l'impression */
+    .bg-white {
+        box-shadow: none !important;
+        border: 1px solid #e2e8f0 !important;
+    }
+    
+    /* Forcer le fond blanc */
+    body {
+        background: white !important;
+    }
+    
+    /* Gradients en couleur unie */
+    [class*="bg-gradient"] {
+        background: #334155 !important;
+        color: white !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
+
+/* ============================================
+   FIN DU DESIGN SYSTEM
+   ============================================ */

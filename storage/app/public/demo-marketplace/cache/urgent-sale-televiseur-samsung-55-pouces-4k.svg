@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="960" viewBox="0 0 1280 960">
+  <rect width="1280" height="960" fill="#f4f4f5"/>
+  <rect x="72" y="72" width="1136" height="816" rx="42" fill="#7c2d12" opacity="0.92"/>
+  <circle cx="230" cy="220" r="72" fill="#ffffff" opacity="0.22"/>
+  <circle cx="1030" cy="760" r="96" fill="#ffffff" opacity="0.12"/>
+  <text x="120" y="520" font-family="Arial, sans-serif" font-size="72" font-weight="700" fill="#ffffff">Televiseur Samsung 55 pouces 4K</text>
+  <text x="120" y="610" font-family="Arial, sans-serif" font-size="36" fill="#ffffff">URGENT-SALE</text>
+</svg>

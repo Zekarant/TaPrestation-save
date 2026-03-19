@@ -1,0 +1,62 @@
+# TaPrestation - robots.txt optimisé pour SEO
+# https://taprestation.com
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://taprestation.com/sitemap.xml
+
+# Pages à indexer en priorité
+Allow: /services
+Allow: /prestataires
+Allow: /equipment
+Allow: /food
+Allow: /urgent-sales
+
+# Bloquer les pages privées/admin
+Disallow: /admin
+Disallow: /admin/*
+Disallow: /login
+Disallow: /register
+Disallow: /password/*
+Disallow: /email/*
+Disallow: /api/*
+Disallow: /sanctum/*
+Disallow: /livewire/*
+Disallow: /_debugbar/*
+Disallow: /telescope/*
+
+# Bloquer les pages de paiement et checkout
+Disallow: /checkout/*
+Disallow: /payment/*
+Disallow: /stripe/*
+
+# Bloquer les pages utilisateur privées
+Disallow: /client/*
+Disallow: /prestataire/*
+Disallow: /driver/*
+Disallow: /notifications
+Disallow: /messaging/*
+
+# Bloquer les fichiers techniques
+Disallow: /*.json$
+Disallow: /storage/
+Disallow: /vendor/
+
+# Autoriser le sitemap
+Allow: /sitemap.xml
+
+# Crawl-delay (optionnel, pour éviter surcharge)
+Crawl-delay: 1
+
+# Googlebot spécifique
+User-agent: Googlebot
+Allow: /
+Disallow: /admin
+Disallow: /api/*
+
+# Bingbot
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 2

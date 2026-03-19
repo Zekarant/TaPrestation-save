@@ -1,0 +1,7 @@
+{
+  "enabled": true,
+  "count": 250,
+  "refresh": true,
+  "use_remote_images": false,
+  "single_use": true
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.taprestation.app",
+      "sha256_cert_fingerprints": [
+        "0B:B6:E5:5F:02:B2:15:74:6A:14:E6:C7:F1:8F:E1:0C:FA:70:DE:50:48:7B:7A:95:C2:BB:E3:9D:6E:6B:A7:2F"
+      ]
+    }
+  }
+]

@@ -1,0 +1,66 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#041225" />
+      <stop offset="55%" stop-color="#0b2147" />
+      <stop offset="100%" stop-color="#120b1f" />
+    </linearGradient>
+    <radialGradient id="blueGlow" cx="24%" cy="18%" r="56%">
+      <stop offset="0%" stop-color="#1cc5ff" stop-opacity="0.95" />
+      <stop offset="55%" stop-color="#1cc5ff" stop-opacity="0.10" />
+      <stop offset="100%" stop-color="#1cc5ff" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="orangeGlow" cx="85%" cy="83%" r="48%">
+      <stop offset="0%" stop-color="#ff9800" stop-opacity="0.95" />
+      <stop offset="50%" stop-color="#ff9800" stop-opacity="0.12" />
+      <stop offset="100%" stop-color="#ff9800" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="phoneStroke" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6ccfff" />
+      <stop offset="48%" stop-color="#1d8dff" />
+      <stop offset="100%" stop-color="#ffad2f" />
+    </linearGradient>
+    <linearGradient id="ringStroke" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffcf55" />
+      <stop offset="50%" stop-color="#ff9d00" />
+      <stop offset="100%" stop-color="#ff6d00" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#000814" flood-opacity="0.35" />
+    </filter>
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="16" />
+    </filter>
+  </defs>
+
+  <rect x="20" y="20" width="984" height="984" rx="228" fill="url(#bg)" />
+  <rect x="20" y="20" width="984" height="984" rx="228" fill="url(#blueGlow)" />
+  <rect x="20" y="20" width="984" height="984" rx="228" fill="url(#orangeGlow)" />
+
+  <g opacity="0.9">
+    <circle cx="164" cy="176" r="8" fill="#fff7d6" />
+    <circle cx="842" cy="158" r="7" fill="#fff7d6" />
+    <circle cx="866" cy="882" r="10" fill="#ffe2a9" />
+    <circle cx="178" cy="852" r="7" fill="#fff3bf" />
+    <circle cx="274" cy="758" r="6" fill="#fff7d6" />
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="236" y="110" width="552" height="804" rx="138" fill="#0a1831" stroke="url(#phoneStroke)" stroke-width="18" />
+    <rect x="330" y="132" width="364" height="44" rx="22" fill="#09111f" opacity="0.96" />
+    <circle cx="536" cy="154" r="7" fill="#213552" />
+    <circle cx="492" cy="154" r="11" fill="#0d1421" />
+    <circle cx="578" cy="154" r="9" fill="#0d1421" />
+  </g>
+
+  <ellipse cx="520" cy="508" rx="244" ry="222" fill="none" stroke="url(#ringStroke)" stroke-width="34" stroke-linecap="round" transform="rotate(-11 520 508)" />
+  <ellipse cx="520" cy="508" rx="244" ry="222" fill="none" stroke="#ffd778" stroke-opacity="0.12" stroke-width="74" filter="url(#softGlow)" transform="rotate(-11 520 508)" />
+
+  <g filter="url(#shadow)">
+    <text x="438" y="618" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="392" font-weight="900" fill="#ffffff">T</text>
+    <text x="622" y="618" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="392" font-weight="900" fill="#ffad1f">P</text>
+  </g>
+
+  <path d="M344 740 C438 700 580 700 694 736" fill="none" stroke="#ff9f0f" stroke-width="28" stroke-linecap="round" />
+  <path d="M380 792 C470 772 572 772 658 792" fill="none" stroke="#ffffff" stroke-opacity="0.35" stroke-width="12" stroke-linecap="round" />
+</svg>

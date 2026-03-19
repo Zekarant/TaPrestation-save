@@ -1,0 +1,15 @@
+id,category,task,priority,status,notes,command
+1,hosting,Ensure domain HTTPS is live,High,Todo,Make sure https://taprestation.com is reachable, 
+2,pwa,Verify manifest is served,High,Todo,https://taprestation.com/manifest.webmanifest, 
+3,pwa,Verify service worker registered,High,Todo,SW must be reachable at /service-worker.js, 
+4,assets,Generate icon assets,High,Todo,Run scripts/generate-icons.ps1 or scripts/generate-icons.sh,"pwsh .\scripts\generate-icons.ps1" or "./scripts/generate-icons.sh"
+5,assets,Generate Play feature graphic 1024x500,High,Todo,Script will create playstore/assets/feature-1024x500.png,See script: scripts/generate-icons.*
+6,twa,Update assetlinks.json with SHA256 fingerprint,High,Todo,Replace placeholder with keystore SHA,Use keytool -list
+7,twa,Bubblewrap init & build,High,Todo,Bubblewrap setup and build, bubblewrap init and bubblewrap build
+8,signing,Generate keystore and sign app,High,Todo,keytool command, keytool -genkey -v -keystore ...
+9,testing,Test on Android device,High,Todo,Install test AAB and verify,Use bundletool or Android Studio local install
+10,publish,Prepare Play Console listing,High,Todo,Icon 512x512,feature graphic, screenshots, privacy URL, 
+11,testing,Test PWA behavior & notifications,Medium,Todo,Test push notifications and login flows, 
+12,policy,Provide Privacy Policy URL,High,Todo,Required if collecting data,Add URL to Play Console
+13,release,Create Play Console release and upload AAB,High,Todo,Upload signed AAB and fill information, 
+14,monitor,Set up automated updates & CI,Medium,Todo,Create a CI script to generate new AAB or run bubblewrap on release, 

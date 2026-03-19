@@ -1,0 +1,148 @@
+{
+  "name": "TaPrestation - Services & Prestataires",
+  "short_name": "TaPrestation",
+  "description": "Trouvez et réservez des prestataires de services professionnels près de chez vous. Coiffure, ménage, réparation, événementiel et plus encore.",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "id": "com.taprestation.app",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
+  "theme_color": "#f97316",
+  "lang": "fr-FR",
+  "dir": "ltr",
+  "categories": ["business", "lifestyle", "shopping"],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "/icons/icon-48x48.png",
+      "sizes": "48x48",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon-1024x1024.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/images/screenshots/screenshot-home.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Page d'accueil TaPrestation"
+    },
+    {
+      "src": "/images/screenshots/screenshot-services.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Liste des services"
+    },
+    {
+      "src": "/images/screenshots/screenshot-booking.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Réservation d'un service"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Rechercher un service",
+      "short_name": "Rechercher",
+      "description": "Trouver un prestataire près de chez vous",
+      "url": "/services?source=shortcut",
+      "icons": [{ "src": "/icons/icon-96x96.png", "sizes": "96x96", "type": "image/png" }]
+    },
+    {
+      "name": "Mes réservations",
+      "short_name": "Réservations",
+      "description": "Voir vos réservations en cours",
+      "url": "/client/bookings?source=shortcut",
+      "icons": [{ "src": "/icons/icon-96x96.png", "sizes": "96x96", "type": "image/png" }]
+    },
+    {
+      "name": "Devenir prestataire",
+      "short_name": "Prestataire",
+      "description": "Proposer vos services sur TaPrestation",
+      "url": "/register?role=prestataire&source=shortcut",
+      "icons": [{ "src": "/icons/icon-96x96.png", "sizes": "96x96", "type": "image/png" }]
+    }
+  ],
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=com.taprestation.app",
+      "id": "com.taprestation.app"
+    },
+    {
+      "platform": "itunes",
+      "url": "https://apps.apple.com/app/taprestation/id0000000000"
+    }
+  ]
+}
