@@ -108,12 +108,10 @@
 <script>
 // Définir les fonctions GLOBALEMENT avant la IIFE
 window.requestNotificationPermission = async function() {
-    console.log('[NotifReminder] Button clicked - requesting permission...');
     
     try {
         // Attendre que OneSignal soit disponible
         if (typeof OneSignal === 'undefined' || !OneSignal.Notifications) {
-            console.log('[NotifReminder] OneSignal not ready, waiting...');
             
             // Essayer d'utiliser OneSignalDeferred
             if (typeof OneSignalDeferred !== 'undefined') {
@@ -135,7 +133,6 @@ window.requestNotificationPermission = async function() {
 };
 
 async function doRequestPermission(OneSignal) {
-    console.log('[NotifReminder] Requesting permission via OneSignal...');
     
     // Fermer le modal immédiatement pour montrer le prompt navigateur
     const modal = document.getElementById('notification-reminder-modal');
@@ -149,7 +146,6 @@ async function doRequestPermission(OneSignal) {
     
     // Vérifier si accepté
     const optedIn = await OneSignal.User.PushSubscription.optedIn;
-    console.log('[NotifReminder] optedIn:', optedIn);
     
     if (optedIn) {
         // Succès !
@@ -159,7 +155,6 @@ async function doRequestPermission(OneSignal) {
     } else {
         // Vérifier la permission du navigateur
         const permission = await OneSignal.Notifications.permission;
-        console.log('[NotifReminder] Browser permission:', permission);
         
         if (permission === 'denied') {
             alert('Les notifications sont bloquées dans votre navigateur. Pour les activer:\n\n1. Cliquez sur le cadenas dans la barre d\'adresse\n2. Autorisez les notifications\n3. Rechargez la page');
@@ -275,7 +270,6 @@ window.dismissNotificationReminder = function(fromModal) {
             const optedIn = await OneSignal.User.PushSubscription.optedIn;
             const permission = await OneSignal.Notifications.permission;
             
-            console.log('[NotifReminder] Check status:', { optedIn, permission });
             
             if (optedIn === true) {
                 hideAllReminders();
@@ -333,7 +327,6 @@ window.dismissNotificationReminder = function(fromModal) {
     if (typeof OneSignalDeferred !== 'undefined') {
         OneSignalDeferred.push(async function(OneSignal) {
             OneSignal.User.PushSubscription.addEventListener('change', function(event) {
-                console.log('[NotifReminder] Subscription changed:', event);
                 if (event.current.optedIn) {
                     hideAllReminders();
                     showSuccessToast();

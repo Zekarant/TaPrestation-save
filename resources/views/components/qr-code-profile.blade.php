@@ -127,7 +127,7 @@ function shareProfile(prestataireId) {
             title: 'Profil Prestataire - TaPrestation',
             text: 'Découvrez ce prestataire sur TaPrestation',
             url: url
-        }).catch(err => console.log('Erreur lors du partage:', err));
+        }).catch(() => {});
     } else {
         // Fallback: copier le lien
         copyProfileUrl(prestataireId);

@@ -575,14 +575,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function fetchLocationSuggestions(query) {
-        console.log('Fetching suggestions for:', query); // Debug log
         fetch(`/api/public/geolocation/cities?search=${encodeURIComponent(query)}&limit=10`)
             .then(response => {
-                console.log('API Response status:', response.status); // Debug log
                 return response.json();
             })
             .then(data => {
-                console.log('API Data received:', data); // Debug log
                 if (data.success && data.data && data.data.length > 0) {
                     displaySuggestions(data.data, query);
                 } else {
@@ -687,7 +684,6 @@ document.addEventListener('DOMContentLoaded', function() {
     function selectLocationFromData(element) {
         const text = element.getAttribute('data-text');
         
-        console.log('Selecting location:', text);
         
         document.getElementById('city').value = text;
         
@@ -698,7 +694,6 @@ document.addEventListener('DOMContentLoaded', function() {
     function selectLocationFromNominatimData(element) {
         const displayName = element.getAttribute('data-display-name');
         
-        console.log('Selecting location from Nominatim:', displayName);
         
         document.getElementById('city').value = displayName;
         

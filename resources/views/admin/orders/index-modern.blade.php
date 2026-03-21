@@ -495,28 +495,24 @@ document.addEventListener('click', function(event) {
 function confirmOrder(orderId) {
     if (confirm('Êtes-vous sûr de vouloir confirmer cette commande ?')) {
         // Implement confirm order logic
-        console.log('Confirming order:', orderId);
     }
 }
 
 function cancelOrder(orderId) {
     if (confirm('Êtes-vous sûr de vouloir annuler cette commande ?')) {
         // Implement cancel order logic
-        console.log('Cancelling order:', orderId);
     }
 }
 
 function duplicateOrder(orderId) {
     if (confirm('Êtes-vous sûr de vouloir dupliquer cette commande ?')) {
         // Implement duplicate order logic
-        console.log('Duplicating order:', orderId);
     }
 }
 
 function deleteOrder(orderId) {
     if (confirm('Êtes-vous sûr de vouloir supprimer cette commande ? Cette action est irréversible.')) {
         // Implement delete order logic
-        console.log('Deleting order:', orderId);
     }
 }
 
@@ -527,7 +523,6 @@ function bulkConfirm() {
     
     if (confirm(`Êtes-vous sûr de vouloir confirmer ${checkedBoxes.length} commande(s) ?`)) {
         // Implement bulk confirm logic
-        console.log('Bulk confirming orders');
     }
 }
 
@@ -537,7 +532,6 @@ function bulkCancel() {
     
     if (confirm(`Êtes-vous sûr de vouloir annuler ${checkedBoxes.length} commande(s) ?`)) {
         // Implement bulk cancel logic
-        console.log('Bulk cancelling orders');
     }
 }
 

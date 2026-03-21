@@ -167,14 +167,16 @@ if (!function_exists('generate_time_slots_for_service')) {
                         }
                         
                         // Generate slots based on the service duration using while loop
+                        // We advance by 1 hour (60 min) to offer all possible start times
                         $slotTime = $startTime->copy();
+                        $stepMinutes = 60; // Advance by 1 hour to show all possible slots
                         $maxIterations = 50; // Safety limit
                         $iteration = 0;
-                        
+
                         while ($slotTime->lt($endTime) && $iteration < $maxIterations) {
                             $iteration++;
                             $slotEnd = $slotTime->copy()->addMinutes($slotDuration);
-                            
+
                             // If there's a break and the service would overlap it, skip to after break
                             if ($breakStart && $breakEnd) {
                                 if ($slotTime->lt($breakEnd) && $slotEnd->gt($breakStart)) {
@@ -183,14 +185,14 @@ if (!function_exists('generate_time_slots_for_service')) {
                                     continue;
                                 }
                             }
-                            
+
                             // Ensure the slot doesn't extend beyond the working day
                             if ($slotEnd->lte($endTime)) {
                                 // Check if slot is booked by a blocking booking (pending/confirmed)
                                 $blockingBooking = $blockingBookings->first(function ($booking) use ($slotTime, $slotEnd) {
                                     return ($booking->start_datetime < $slotEnd) && ($booking->end_datetime > $slotTime);
                                 });
-                                
+
                                 // Check if slot has any booking (for display info)
                                 $anyBooking = $allBookings->first(function ($booking) use ($slotTime, $slotEnd) {
                                     return ($booking->start_datetime < $slotEnd) && ($booking->end_datetime > $slotTime);
@@ -211,9 +213,9 @@ if (!function_exists('generate_time_slots_for_service')) {
                                     'availability_end' => $availability->end_time
                                 ];
                             }
-                            
-                            // Move to next slot
-                            $slotTime->addMinutes($slotDuration);
+
+                            // Move to next slot (advance by 1 hour for granular choices)
+                            $slotTime->addMinutes($stepMinutes);
                         }
                     }
                 } else {

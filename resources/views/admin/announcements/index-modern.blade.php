@@ -474,14 +474,12 @@ function changePerPage(value) {
 function approveAnnouncement(id) {
     if (confirm('Êtes-vous sûr de vouloir approuver cette annonce ?')) {
         // Logique d'approbation à implémenter
-        console.log('Approbation de l\'annonce ID:', id);
     }
 }
 
 function deleteAnnouncement(id) {
     if (confirm('Êtes-vous sûr de vouloir supprimer cette annonce ?')) {
         // Logique de suppression à implémenter
-        console.log('Suppression de l\'annonce ID:', id);
     }
 }
 </script>

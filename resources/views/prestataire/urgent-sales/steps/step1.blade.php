@@ -281,7 +281,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const option = document.createElement('option');
                     option.value = subcategory.id;
                     option.textContent = subcategory.name;
-                    if ('{{ old("category_id") }}' == subcategory.id) {
+                    if ({!! Js::from(old('category_id')) !!} == subcategory.id) {
                         option.selected = true;
                     }
                     subcategorySelect.appendChild(option);

@@ -828,9 +828,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 selectedStream = await navigator.mediaDevices.getUserMedia(constraints);
                 const track = selectedStream.getVideoTracks()[0];
                 const settings = track.getSettings();
-                console.log('Camera quality:', settings.width + 'x' + settings.height + ' @ ' + settings.frameRate + 'fps');
             } catch (e) {
-                console.log('High quality failed, trying fallback...', e);
                 // Fallback avec contraintes minimales
                 selectedStream = await navigator.mediaDevices.getUserMedia({
                     video: { facingMode: facingMode },
@@ -846,7 +844,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const track = stream.getVideoTracks()[0];
             const settings = track.getSettings();
-            console.log('Camera:', settings.width + 'x' + settings.height);
 
             zoomTrack = track;
             const caps = track.getCapabilities ? track.getCapabilities() : {};
@@ -861,7 +858,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 try {
                     await track.applyConstraints({ advanced: [{ zoom: minZoom }] });
                 } catch (e) {
-                    console.log('Zoom reset not supported');
                 }
             }
         } catch (error) {
@@ -950,7 +946,6 @@ document.addEventListener('DOMContentLoaded', function() {
             videoBitrate = 1500000; // 1.5 Mbps pour SD
         }
         
-        console.log('Recording at', settings.width + 'x' + settings.height, 'with bitrate:', (videoBitrate / 1000000) + ' Mbps');
 
         let options = null;
         let selectedMimeType = null;
@@ -964,7 +959,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     audioBitsPerSecond: 128000  // 128 kbps audio (suffisant)
                 };
                 recordedMimeType = mimeType;
-                console.log('Recording format:', mimeType);
                 break;
             }
         }
@@ -1142,7 +1136,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     zoomTrack.applyConstraints({ advanced: [{ zoom: newZoom }] });
                 }
             } catch (err) {
-                console.log('Zoom non supporté:', err);
             }
         }
     }, { passive: false });

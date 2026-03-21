@@ -1157,7 +1157,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const o = document.createElement('option');
                 o.value = c.id; o.textContent = c.name; sel.appendChild(o);
             });
-            const old = "{{ old('category_id') }}";
+            const old = {!! Js::from(old('category_id')) !!};
             if (old) { sel.value = old; sel.dispatchEvent(new Event('change')); }
         }).catch(() => {});
     }
@@ -1171,7 +1171,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 subSel.innerHTML = '<option value="">Sélectionnez une sous-catégorie</option>';
                 (data || []).forEach(s => { const o = document.createElement('option'); o.value = s.id; o.textContent = s.name; subSel.appendChild(o); });
                 subSel.disabled = false;
-                const old = "{{ old('subcategory_id') }}"; if (old) subSel.value = old;
+                const old = {!! Js::from(old('subcategory_id')) !!}; if (old) subSel.value = old;
             }).catch(() => { subSel.innerHTML = '<option value="">Erreur</option>'; subSel.disabled = true; });
         });
     }

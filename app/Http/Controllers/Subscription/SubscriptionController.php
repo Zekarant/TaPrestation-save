@@ -79,6 +79,11 @@ class SubscriptionController extends Controller
                 return redirect()->back()->with('error', "Paiement Stripe indisponible. Contactez l'administrateur.");
             }
 
+            // Audit #22: vérifier que l'email est confirmé avant de lier un compte Stripe
+            if (!$user->hasVerifiedEmail()) {
+                return redirect()->back()->with('error', "Vous devez vérifier votre adresse e-mail avant de souscrire à un abonnement.");
+            }
+
             if (empty($plan->stripe_price_id)) {
                 return redirect()->back()->with('error', "Ce plan n'est pas encore configuré pour Stripe (stripe_price_id manquant).");
             }

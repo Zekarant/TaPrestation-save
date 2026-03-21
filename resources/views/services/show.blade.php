@@ -851,7 +851,7 @@
             }).addTo(map);
 
             L.marker([{{ $service->latitude }}, {{ $service->longitude }}]).addTo(map)
-                .bindPopup('{{ $service->title }}')
+                .bindPopup({!! Js::from($service->title) !!})
                 .openPopup();
         </script>
     @endif
@@ -874,7 +874,7 @@
             @foreach($service->images as $image)
                 {
                     url: "{{ \Illuminate\Support\Facades\Storage::disk('public')->exists($image->image_path) ? \Illuminate\Support\Facades\Storage::url($image->image_path) : asset('images/placeholder.svg') }}",
-                    alt: '{{ $service->title }} - Photo {{ $loop->index + 1 }}'
+                    alt: {!! Js::from($service->title . ' - Photo ' . ($loop->index + 1)) !!}
                 }{{ !$loop->last ? ',' : '' }}
             @endforeach
         ];

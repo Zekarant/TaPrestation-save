@@ -236,7 +236,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 const imageUrl = URL.createObjectURL(file);
                 
                 img.onload = function() {
-                    console.log('Image loaded successfully with createObjectURL');
                     URL.revokeObjectURL(imageUrl); // Clean up memory
                 };
                 img.onerror = function() {

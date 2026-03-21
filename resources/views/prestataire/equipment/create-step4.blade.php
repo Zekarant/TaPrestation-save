@@ -436,14 +436,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function fetchLocationSuggestions(query) {
-        console.log('Fetching suggestions for:', query);
         fetch(`/api/public/geolocation/cities?search=${encodeURIComponent(query)}&limit=10`)
             .then(response => {
-                console.log('API Response status:', response.status);
                 return response.json();
             })
             .then(data => {
-                console.log('API Data received:', data);
                 if (data.success && data.data && data.data.length > 0) {
                     displaySuggestions(data.data, query);
                 } else {
@@ -554,7 +551,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const lon = parseFloat(element.getAttribute('data-lon'));
         const displayName = element.getAttribute('data-display-name');
         
-        console.log('Selecting location:', displayName, lat, lon);
         
         document.getElementById('selectedAddress').value = displayName;
         document.getElementById('latitude').value = lat.toFixed(6);

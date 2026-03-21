@@ -1084,7 +1084,6 @@
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.getRegistrations().then(function(registrations) {
                 for(let registration of registrations) {
-                    console.log('Unregistering SW:', registration);
                     registration.unregister();
                 }
             });

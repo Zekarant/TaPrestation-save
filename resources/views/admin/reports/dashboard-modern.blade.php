@@ -197,7 +197,6 @@
 <script>
 function toggleFilters() {
     // Implémentation des filtres si nécessaire
-    console.log('Toggle filters');
 }
 
 // Graphiques Chart.js

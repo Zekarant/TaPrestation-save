@@ -189,7 +189,6 @@ function toggleSwitch(inputName) {
         thumb.style.left = '2px';
     }
     
-    console.log(inputName + ' = ' + newValue);
 }
 
 document.querySelectorAll('[data-feature-toggle]').forEach(function(toggle) {
@@ -208,9 +207,7 @@ document.querySelectorAll('[data-feature-toggle]').forEach(function(toggle) {
 // Debug: Afficher les données envoyées
 document.getElementById('featuresForm').addEventListener('submit', function(e) {
     const formData = new FormData(this);
-    console.log('=== DONNÉES DU FORMULAIRE ===');
     for (let [key, value] of formData.entries()) {
-        console.log(key + ': ' + value);
     }
 });
 </script>

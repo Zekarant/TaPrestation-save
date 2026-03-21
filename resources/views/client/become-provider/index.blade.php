@@ -148,8 +148,8 @@ function becomeProviderForm() {
 
         form: {
             company_name: '',
-            phone: '{{ $prefillData['phone'] ?? '' }}',
-            city: '{{ $prefillData['city'] ?? '' }}',
+            phone: {!! Js::from($prefillData['phone'] ?? '') !!},
+            city: {!! Js::from($prefillData['city'] ?? '') !!},
             description: '',
             category_id: '',
             subcategory_id: '',

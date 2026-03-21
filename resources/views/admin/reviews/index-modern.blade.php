@@ -428,21 +428,18 @@ function clearSelection() {
 function approveReview(reviewId) {
     if (confirm('Êtes-vous sûr de vouloir approuver cet avis ?')) {
         // Implement approve review logic
-        console.log('Approving review:', reviewId);
     }
 }
 
 function rejectReview(reviewId) {
     if (confirm('Êtes-vous sûr de vouloir rejeter cet avis ?')) {
         // Implement reject review logic
-        console.log('Rejecting review:', reviewId);
     }
 }
 
 function deleteReview(reviewId) {
     if (confirm('Êtes-vous sûr de vouloir supprimer cet avis ? Cette action est irréversible.')) {
         // Implement delete review logic
-        console.log('Deleting review:', reviewId);
     }
 }
 
@@ -453,7 +450,6 @@ function bulkApprove() {
     
     if (confirm(`Êtes-vous sûr de vouloir approuver ${checkedBoxes.length} avis ?`)) {
         // Implement bulk approve logic
-        console.log('Bulk approving reviews');
     }
 }
 
@@ -463,7 +459,6 @@ function bulkReject() {
     
     if (confirm(`Êtes-vous sûr de vouloir rejeter ${checkedBoxes.length} avis ?`)) {
         // Implement bulk reject logic
-        console.log('Bulk rejecting reviews');
     }
 }
 
@@ -473,7 +468,6 @@ function bulkDelete() {
     
     if (confirm(`Êtes-vous sûr de vouloir supprimer ${checkedBoxes.length} avis ? Cette action est irréversible.`)) {
         // Implement bulk delete logic
-        console.log('Bulk deleting reviews');
     }
 }
 

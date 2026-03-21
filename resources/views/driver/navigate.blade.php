@@ -231,7 +231,7 @@ function openExtNav(){
 
 function callPlace(){
     @if($foodOrder->prestataire?->phone)
-        window.location.href='tel:{{ $foodOrder->prestataire->phone }}';
+        window.location.href='tel:'+{!! Js::from($foodOrder->prestataire->phone) !!};
     @else
         alert('Numéro non disponible');
     @endif
@@ -239,7 +239,7 @@ function callPlace(){
 
 function callClient(){
     @if($foodOrder->client?->phone)
-        window.location.href='tel:{{ $foodOrder->client->phone }}';
+        window.location.href='tel:'+{!! Js::from($foodOrder->client->phone) !!};
     @else
         alert('Numéro non disponible');
     @endif

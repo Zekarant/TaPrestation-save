@@ -318,7 +318,7 @@
                                              onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%23f3f4f6%22/%3E%3Ctext x=%2250%22 y=%2255%22 text-anchor=%22middle%22 font-size=%2210%22 fill=%22%239ca3af%22%3ENo image%3C/text%3E%3C/svg%3E';">
                                         {{-- Bouton supprimer --}}
                                         <button type="button" 
-                                                onclick="removePhoto({{ $index }}, '{{ addslashes($photo) }}')"
+                                                onclick="removePhoto({{ $index }}, {{ @js($photo) }})"
                                                 class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
                                                 title="Supprimer cette photo">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

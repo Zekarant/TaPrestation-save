@@ -111,7 +111,7 @@
                                     }
                                     $firstPhoto = $firstPhoto ?? asset('/images/placeholder.svg');
                                 @endphp
-                                <x-media-image :path="$rental->equipment->photos[0]" :alt="$rental->equipment->name" class="w-24 h-24 object-cover rounded-lg cursor-pointer" onclick="showPhotoModal('{{ addslashes($firstPhoto) }}','{{ addslashes($rental->equipment->name) }}')" />
+                                <x-media-image :path="$rental->equipment->photos[0]" :alt="$rental->equipment->name" class="w-24 h-24 object-cover rounded-lg cursor-pointer" onclick="showPhotoModal({{ @js($firstPhoto) }},{{ @js($rental->equipment->name) }})" />
                             @else
                                 <div class="w-24 h-24 bg-gray-200 rounded-lg flex items-center justify-center">
                                     <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

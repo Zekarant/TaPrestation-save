@@ -517,15 +517,6 @@
                 // Marquer comme en cours de soumission
                 this.isSubmitting = true;
                 
-                console.log('Formulaire soumis avec:', {
-                    startDate: this.startDate,
-                    endDate: this.endDate,
-                    isHourly: this.isHourly,
-                    startTime: this.startTime,
-                    endTime: this.endTime,
-                    totalPrice: this.totalPrice
-                });
-                
                 // Laisser le formulaire se soumettre
                 return true;
             },

@@ -1494,7 +1494,7 @@ function closeReportModal() {
 function shareProduct() {
     if (navigator.share) {
         navigator.share({
-            title: '{{ $urgentSale->title }}',
+            title: {!! Js::from($urgentSale->title) !!},
             text: 'Découvrez cette vente urgente sur TaPrestation',
             url: window.location.href
         });

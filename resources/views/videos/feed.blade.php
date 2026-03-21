@@ -433,7 +433,6 @@
             navigator.serviceWorker.getRegistrations().then(function(registrations) {
                 for(let registration of registrations) {
                     registration.unregister();
-                    console.log('Service Worker unregistered');
                 }
             });
         }
@@ -501,7 +500,6 @@
                         if (spinner) spinner.style.display = 'none';
                         if (indicator) indicator.style.opacity = '0';
                     }).catch(function(error) {
-                        console.log('Play error:', error.name);
                         if (spinner) spinner.style.display = 'none';
                         // Montrer l'indicateur de play pour indiquer que l'utilisateur doit taper
                         if (indicator) {
@@ -568,7 +566,6 @@
                 });
                 // iOS: gérer stalled et suspend
                 video.addEventListener('stalled', function() {
-                    console.log('Video stalled, attempting reload...');
                 });
                 video.addEventListener('suspend', function() {
                     // Normal sur iOS quand la vidéo est mise en buffer
@@ -592,7 +589,6 @@
 
                 if (video.paused) {
                     video.play().catch(function(err) {
-                        console.log('Play on tap failed:', err);
                     });
                     if (indicator) indicator.innerHTML = '<svg width="40" height="40" fill="#fff" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
                 } else {

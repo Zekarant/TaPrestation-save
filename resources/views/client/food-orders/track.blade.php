@@ -660,7 +660,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         })
-        .catch(err => console.log('GPS polling error:', err));
+        .catch(() => {});
     }
 
     // ===== METTRE À JOUR LE MARQUEUR LIVREUR =====
@@ -775,7 +775,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         })
-        .catch(function(err) { console.log('Route API error:', err); });
+        .catch(function() {});
     }
 
     // ===== AUTO-REFRESH STATUT =====
@@ -814,7 +814,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 location.reload();
             }
         })
-        .catch(function(err) { console.log('Status check error:', err); });
+        .catch(function() {});
     }
 
     function playNotificationSound() {

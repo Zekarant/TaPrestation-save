@@ -381,7 +381,6 @@
         crossorigin=""></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    console.log('DOM content loaded');
     
     // Gestion des catégories et sous-catégories
     const parentCategorySelect = document.getElementById('parent_category_id');
@@ -563,14 +562,11 @@ document.addEventListener('DOMContentLoaded', function () {
     
     // Autocomplete functions
     function fetchLocationSuggestions(query) {
-        console.log('Fetching suggestions for:', query);
         fetch(`/api/public/geolocation/cities?search=${encodeURIComponent(query)}&limit=10`)
             .then(response => {
-                console.log('API Response status:', response.status);
                 return response.json();
             })
             .then(data => {
-                console.log('API Data received:', data);
                 if (data.success && data.data && data.data.length > 0) {
                     displaySuggestions(data.data, query);
                     if (data.warning) {
@@ -991,7 +987,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             })
             .then(response => {
-                console.log('Response status:', response.status);
                 // Check if the response is OK (status in the range 200-299)
                 if (!response.ok) {
                     // Try to parse the error response
@@ -1013,7 +1008,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             })
             .then(data => {
-                console.log('Success response:', data);
                 if (data.success) {
                     const photoElement = document.getElementById(`photo-container-${photoIndex}`);
                     if (photoElement) {

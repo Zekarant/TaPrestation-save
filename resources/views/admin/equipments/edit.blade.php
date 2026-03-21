@@ -354,7 +354,7 @@ document.addEventListener('DOMContentLoaded', function() {
         categorySelect.dispatchEvent(new Event('change'));
         
         // Sélectionner la sous-catégorie existante
-        const existingSubcategoryId = '{{ old("subcategory_id", $equipment->subcategory_id) }}';
+        const existingSubcategoryId = {!! Js::from(old('subcategory_id', $equipment->subcategory_id)) !!};
         if (existingSubcategoryId) {
             setTimeout(() => {
                 document.getElementById('subcategory_id').value = existingSubcategoryId;

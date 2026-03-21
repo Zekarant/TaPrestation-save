@@ -178,7 +178,6 @@
             },
             dateClick: function(info) {
                 // Logic to open side panel with day's details
-                console.log('Clicked on: ' + info.dateStr);
                 // You can implement the side panel logic here
             },
             eventClick: function(info) {

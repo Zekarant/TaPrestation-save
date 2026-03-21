@@ -392,25 +392,20 @@
                     allowLocalhostAsSecureOrigin: true,
                 });
                 
-                console.log('[OneSignal] Initialized successfully');
                 
                 // Vérifier le statut d'abonnement
                 const permission = await OneSignal.Notifications.permission;
-                console.log('[OneSignal] Permission status:', permission);
                 
                 // Lier l'utilisateur Laravel à OneSignal
                 @auth
                 try {
                     await OneSignal.login("{{ auth()->id() }}");
-                    console.log('[OneSignal] User linked:', {{ auth()->id() }});
                     
                     // Vérifier si abonné
                     const subscribed = await OneSignal.User.PushSubscription.optedIn;
-                    console.log('[OneSignal] Subscribed:', subscribed);
                     
                     if (!subscribed && permission !== 'denied') {
                         // Demander la permission si pas encore abonné
-                        console.log('[OneSignal] Requesting subscription...');
                     }
                 } catch (e) {
                     console.warn('[OneSignal] User link error:', e.message);
@@ -432,10 +427,8 @@
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('/service-worker.js')
                     .then(function(registration) {
-                        console.log('[App] Service Worker registered:', registration.scope);
                     })
                     .catch(function(error) {
-                        console.log('[App] Service Worker registration failed:', error);
                     });
             }
 
@@ -445,17 +438,14 @@
                 
                 async requestPermission() {
                     if (!('Notification' in window)) {
-                        console.log('[Push] Notifications not supported');
                         return false;
                     }
                     
                     if (!('serviceWorker' in navigator)) {
-                        console.log('[Push] Service Worker not supported');
                         return false;
                     }
                     
                     const permission = await Notification.requestPermission();
-                    console.log('[Push] Permission:', permission);
                     
                     if (permission === 'granted') {
                         await this.subscribe();
@@ -489,10 +479,8 @@
                             });
                             
                             const data = await response.json();
-                            console.log('[Push] Subscribed:', data);
                         }
                     } catch (error) {
-                        console.log('[Push] Subscribe error:', error);
                     }
                 },
                 
@@ -531,11 +519,9 @@
                 start() {
                     // Ne pas démarrer si les notifications ne sont pas supportées ou refusées
                     if (!('Notification' in window) || Notification.permission !== 'granted') {
-                        console.log('[NotifPolling] Notifications non supportées ou non autorisées');
                         return;
                     }
                     
-                    console.log('[NotifPolling] Démarrage du polling...');
                     
                     // Premier check immédiat
                     this.checkForNotifications();
@@ -568,14 +554,12 @@
                         const data = await response.json();
                         
                         if (data.notifications && data.notifications.length > 0) {
-                            console.log('[NotifPolling] Nouvelles notifications:', data.notifications.length);
                             
                             for (const notif of data.notifications) {
                                 await this.showNotification(notif);
                             }
                         }
                     } catch (error) {
-                        console.log('[NotifPolling] Erreur:', error);
                     }
                 },
                 
@@ -600,9 +584,7 @@
                             ]
                         });
                         
-                        console.log('[NotifPolling] Notification affichée:', notif.title);
                     } catch (error) {
-                        console.log('[NotifPolling] Erreur affichage notification:', error);
                     }
                 }
             };

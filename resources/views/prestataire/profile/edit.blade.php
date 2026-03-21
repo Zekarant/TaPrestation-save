@@ -1312,7 +1312,7 @@
     
     const categorySelect = document.getElementById('category_id');
     const subcategorySelect = document.getElementById('subcategory_id');
-    const currentSubcategoryId = "{{ old('subcategory_id', $prestataire->subcategory_id ?? '') }}";
+    const currentSubcategoryId = {!! Js::from(old('subcategory_id', $prestataire->subcategory_id ?? '')) !!};
 
     function loadSubcategories(categoryId, selectedSubcategoryId = null) {
         if (!subcategorySelect) return;

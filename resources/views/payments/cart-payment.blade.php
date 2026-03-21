@@ -296,7 +296,6 @@
             // Écouter l'événement ready
             paymentElement.on('ready', () => {
                 paymentElementReady = true;
-                console.log('Payment Element ready');
             });
             
             // Écouter les erreurs
@@ -457,7 +456,7 @@
             const { error } = await stripe.confirmKlarnaPayment(currentClientSecret, {
                 payment_method: {
                     billing_details: {
-                        email: "{{ auth()->user()->email ?? '' }}",
+                        email: {!! Js::from(auth()->user()->email ?? '') !!},
                         address: { country: 'FR' }
                     }
                 },

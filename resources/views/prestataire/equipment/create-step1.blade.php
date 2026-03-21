@@ -266,7 +266,7 @@ function loadSubcategories(categoryId) {
                     const option = document.createElement('option');
                     option.value = subcategory.id;
                     option.textContent = subcategory.name;
-                    if (subcategory.id == '{{ old("subcategory_id", session("equipment_step1.subcategory_id")) }}') {
+                    if (subcategory.id == {!! Js::from(old('subcategory_id', session('equipment_step1.subcategory_id'))) !!}) {
                         option.selected = true;
                     }
                     subcategorySelect.appendChild(option);

@@ -468,7 +468,7 @@
                                         </td>
                                         <td class="px-4 py-3">
                                             <div class="flex items-center justify-center gap-1">
-                                                <button onclick="openStockModal({{ $item->id }}, '{{ addslashes($item->name) }}', {{ $item->quantity }})" 
+                                                <button onclick="openStockModal({{ $item->id }}, {{ @js($item->name) }}, {{ $item->quantity }})" 
                                                         class="p-1.5 text-gray-500 hover:text-green-600 hover:bg-green-50 rounded-lg transition" title="Ajuster stock">
                                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/>

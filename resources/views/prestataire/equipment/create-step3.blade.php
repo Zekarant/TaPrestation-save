@@ -267,7 +267,7 @@ function removeImage(index) {
 
 // Drag and drop functionality
 const uploadArea = document.getElementById('upload-area');
-const mainPhotoInput = document.getElementById('main_photo');
+const photosInput = document.getElementById('photos');
 
 ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
     uploadArea.addEventListener(eventName, preventDefaults, false);
@@ -299,10 +299,20 @@ uploadArea.addEventListener('drop', handleDrop, false);
 function handleDrop(e) {
     const dt = e.dataTransfer;
     const files = dt.files;
-    
+
     if (files.length > 0) {
-        mainPhotoInput.files = files;
-        previewMainImage(mainPhotoInput);
+        const combined = new DataTransfer();
+        // Ajouter les fichiers existants
+        for (let i = 0; i < photosInput.files.length && combined.files.length < 5; i++) {
+            combined.items.add(photosInput.files[i]);
+        }
+        // Ajouter les nouveaux fichiers
+        for (let i = 0; i < files.length && combined.files.length < 5; i++) {
+            combined.items.add(files[i]);
+        }
+        photosInput.files = combined.files;
+        existingFiles = Array.from(combined.files);
+        previewImages(photosInput);
     }
 }
 

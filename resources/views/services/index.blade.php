@@ -280,7 +280,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const option = document.createElement('option');
                     option.value = subcategory.id;
                     option.textContent = subcategory.name;
-                    if ('{{ $currentCategory }}' == subcategory.id) {
+                    if ({!! Js::from($currentCategory) !!} == subcategory.id) {
                         option.selected = true;
                     }
                     subcategorySelect.appendChild(option);
@@ -487,14 +487,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function fetchLocationSuggestions(query) {
-        console.log('Fetching suggestions for:', query); // Debug log
         fetch(`/api/public/geolocation/cities?search=${encodeURIComponent(query)}&limit=10`)
             .then(response => {
-                console.log('API Response status:', response.status); // Debug log
                 return response.json();
             })
             .then(data => {
-                console.log('API Data received:', data); // Debug log
                 if (data.success && data.data && data.data.length > 0) {
                     displaySuggestions(data.data, query);
                 } else {
@@ -601,7 +598,6 @@ document.addEventListener('DOMContentLoaded', function() {
     function selectLocationFromData(element) {
         const text = element.getAttribute('data-text');
         
-        console.log('Selecting location:', text);
         
         document.getElementById('location').value = text;
         
@@ -614,7 +610,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const lat = element.getAttribute('data-lat');
         const lon = element.getAttribute('data-lon');
         
-        console.log('Selecting location from Nominatim:', displayName, 'lat:', lat, 'lon:', lon);
         
         document.getElementById('location').value = displayName;
         

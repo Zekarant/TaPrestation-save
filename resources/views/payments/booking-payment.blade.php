@@ -531,7 +531,6 @@
             
             // Écouter l'événement ready
             paymentElement.on('ready', () => {
-                console.log('Payment Element ready');
             });
             
             // Écouter les erreurs

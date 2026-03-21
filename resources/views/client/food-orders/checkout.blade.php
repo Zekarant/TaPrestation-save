@@ -475,7 +475,6 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-console.log('Food checkout script loaded');
 
 // Fonction pour sélectionner le mode de livraison
 function selectDeliveryType(type) {
@@ -1101,10 +1100,8 @@ const recaptchaSiteKey = @json((string) config('recaptcha.site_key'));
 
 document.getElementById('checkoutForm').addEventListener('submit', async function(e) {
     e.preventDefault();
-    console.log('Form submit triggered');
     
     const deliveryType = document.querySelector('input[name="delivery_type"]:checked');
-    console.log('Delivery type:', deliveryType ? deliveryType.value : 'NONE');
     
     if (!deliveryType) {
         alert('Veuillez choisir un mode de récupération.');

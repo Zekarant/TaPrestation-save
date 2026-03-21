@@ -364,7 +364,6 @@
         
         try {
             // Créer le Payment Intent
-            console.log('Creating payment intent...');
             const response = await fetch('{{ route("bookings.prepayment.intent") }}', {
                 method: 'POST',
                 headers: {
@@ -374,7 +373,6 @@
             });
             
             const data = await response.json();
-            console.log('Payment Intent response:', data);
             
             if (!response.ok) {
                 throw new Error(data.error || data.message || 'Erreur serveur: ' + response.status);
@@ -387,7 +385,6 @@
             }
             
             currentClientSecret = data.clientSecret;
-            console.log('Client secret received, initializing Elements...');
             
             // Créer les Elements Stripe
             elements = stripe.elements({
@@ -417,7 +414,6 @@
             
             // Attendre que le Payment Element soit prêt
             paymentElement.on('ready', function() {
-                console.log('Payment Element ready');
                 stripeInitialized = true;
                 document.getElementById('card-errors').classList.add('hidden');
             });

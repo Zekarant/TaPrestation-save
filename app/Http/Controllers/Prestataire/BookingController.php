@@ -315,7 +315,7 @@ class BookingController extends Controller
         }
         
         $bookingsToUpdate = collect([$booking]);
-        
+
         if ($sessionId) {
             // Find all bookings in the same session
             $sessionBookings = Booking::where('client_id', $booking->client_id)
@@ -324,25 +324,28 @@ class BookingController extends Controller
                 ->where('client_notes', 'LIKE', '%[SESSION:' . $sessionId . ']%')
                 ->where('status', 'pending')
                 ->get();
-            
+
             $bookingsToUpdate = $sessionBookings;
         }
-        
-        // Update all bookings in the session
-        $updatedCount = 0;
-        foreach ($bookingsToUpdate as $bookingToUpdate) {
-            $bookingToUpdate->update(['status' => 'confirmed']);
-            $updatedCount++;
-        }
-        
+
+        // Audit #27: wrap multi-update in transaction
+        $updatedCount = DB::transaction(function () use ($bookingsToUpdate) {
+            $count = 0;
+            foreach ($bookingsToUpdate as $bookingToUpdate) {
+                $bookingToUpdate->update(['status' => 'confirmed']);
+                $count++;
+            }
+            return $count;
+        });
+
         // Send notification to client (only once for the session)
         $booking->load('client.user');
         Notification::send($booking->client->user, new BookingConfirmedNotification($booking));
-        
-        $message = $sessionId 
+
+        $message = $sessionId
             ? "Session de {$updatedCount} créneaux acceptée avec succès."
             : 'Réservation acceptée avec succès.';
-            
+
         // Return JSON response for AJAX requests
         if ($request->ajax()) {
             return response()->json([
@@ -351,7 +354,7 @@ class BookingController extends Controller
                 'updated_count' => $updatedCount
             ]);
         }
-        
+
         return redirect()->back()->with('success', $message);
     }
 
@@ -393,46 +396,49 @@ class BookingController extends Controller
             $bookingsToUpdate = $sessionBookings;
         }
         
-        // Process refunds for any pre-paid bookings
+        // Audit #27: wrap refunds + multi-update in transaction
         $refundedAmount = 0;
         $refundErrors = [];
-        $bookingPaymentStatuses = [];
-        
-        foreach ($bookingsToUpdate as $bookingToUpdate) {
-            // Check if this booking has any payments that need refunding
-            if (in_array($bookingToUpdate->payment_status, ['deposit_paid', 'paid'])) {
-                $refundResult = $this->processBookingRefund($bookingToUpdate, $rejectionReason);
-                if ($refundResult['success']) {
-                    $refundedAmount += $refundResult['amount'];
-                    if (($refundResult['amount'] ?? 0) > 0) {
-                        $bookingPaymentStatuses[$bookingToUpdate->id] = 'refunded';
+        $updatedCount = 0;
+
+        DB::transaction(function () use ($bookingsToUpdate, $rejectionReason, &$refundedAmount, &$refundErrors, &$updatedCount) {
+            $bookingPaymentStatuses = [];
+
+            // Process refunds for any pre-paid bookings
+            foreach ($bookingsToUpdate as $bookingToUpdate) {
+                if (in_array($bookingToUpdate->payment_status, ['deposit_paid', 'paid'])) {
+                    $refundResult = $this->processBookingRefund($bookingToUpdate, $rejectionReason);
+                    if ($refundResult['success']) {
+                        $refundedAmount += $refundResult['amount'];
+                        if (($refundResult['amount'] ?? 0) > 0) {
+                            $bookingPaymentStatuses[$bookingToUpdate->id] = 'refunded';
+                        }
+                        if (!empty($refundResult['partial_failure'])) {
+                            $refundErrors[] = 'Remboursement partiel sur la réservation #' . $bookingToUpdate->id;
+                        }
+                    } else {
+                        $refundErrors[] = $refundResult['error'];
                     }
-                    if (!empty($refundResult['partial_failure'])) {
-                        $refundErrors[] = 'Remboursement partiel sur la réservation #' . $bookingToUpdate->id;
-                    }
-                } else {
-                    $refundErrors[] = $refundResult['error'];
                 }
             }
-        }
-        
-        // Update all bookings in the session
-        $updatedCount = 0;
-        foreach ($bookingsToUpdate as $bookingToUpdate) {
-            $updates = [
-                'status' => 'rejected',
-                'rejection_reason' => $rejectionReason,
-            ];
 
-            if (array_key_exists($bookingToUpdate->id, $bookingPaymentStatuses)) {
-                $updates['payment_status'] = $bookingPaymentStatuses[$bookingToUpdate->id];
-            } elseif ($bookingToUpdate->payment_status === 'pending') {
-                $updates['payment_status'] = 'pending';
+            // Update all bookings in the session
+            foreach ($bookingsToUpdate as $bookingToUpdate) {
+                $updates = [
+                    'status' => 'rejected',
+                    'rejection_reason' => $rejectionReason,
+                ];
+
+                if (array_key_exists($bookingToUpdate->id, $bookingPaymentStatuses)) {
+                    $updates['payment_status'] = $bookingPaymentStatuses[$bookingToUpdate->id];
+                } elseif ($bookingToUpdate->payment_status === 'pending') {
+                    $updates['payment_status'] = 'pending';
+                }
+
+                $bookingToUpdate->update($updates);
+                $updatedCount++;
             }
-
-            $bookingToUpdate->update($updates);
-            $updatedCount++;
-        }
+        });
         
         // Send notification to client (only once for the session)
         $booking->load('client.user');
@@ -475,7 +481,7 @@ class BookingController extends Controller
     /**
      * Process refund for a booking
      */
-    private function processBookingRefund(Booking $booking, string $reason = null): array
+    private function processBookingRefund(Booking $booking, ?string $reason = null): array
     {
         try {
             // Priorité: annulation escrow (gère règles d'annulation + frais Stripe)

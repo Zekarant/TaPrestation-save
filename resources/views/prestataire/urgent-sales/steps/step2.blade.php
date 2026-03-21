@@ -325,7 +325,6 @@ function hideSuggestions() {
     if (suggestionsContainer) {
         suggestionsContainer.classList.add('hidden');
         suggestionsContainer.style.display = 'none';
-        console.log('Suggestions hidden');
     }
 }
 
@@ -335,24 +334,20 @@ function fetchLocationSuggestions(query) {
         return;
     }
 
-    console.log('Fetching suggestions for:', query);
     
     // Try the public geolocation API first
     fetch(`/api/public/geolocation/cities?search=${encodeURIComponent(query)}&limit=10`)
         .then(response => {
-            console.log('API response status:', response.status);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             return response.json();
         })
         .then(data => {
-            console.log('API response data:', data);
             if (data.success && data.data && data.data.length > 0) {
                 displaySuggestions(data.data, query);
             } else {
                 // Fallback to simple geocoding API
-                console.log('No results from cities API, trying fallback');
                 tryFallbackSuggestions(query);
             }
         })
@@ -383,7 +378,6 @@ function tryFallbackSuggestions(query) {
     );
     
     if (filteredCities.length > 0) {
-        console.log('Using fallback suggestions:', filteredCities);
         displaySuggestions(filteredCities, query);
     } else {
         hideSuggestions();
@@ -397,7 +391,6 @@ function displaySuggestions(suggestions, query) {
         return;
     }
     
-    console.log('Displaying suggestions:', suggestions);
     container.innerHTML = '';
 
     suggestions.forEach((suggestion, index) => {
@@ -428,7 +421,6 @@ function displaySuggestions(suggestions, query) {
     container.style.display = 'block';
     container.style.zIndex = '999999';
     
-    console.log('Suggestions container is now visible:', !container.classList.contains('hidden'));
 }
 
 function selectLocationFromData(element) {
@@ -436,7 +428,6 @@ function selectLocationFromData(element) {
     const lon = parseFloat(element.getAttribute('data-lon'));
     const displayName = element.getAttribute('data-display-name');
     
-    console.log('Selecting location:', displayName, lat, lon);
     
     document.getElementById('selectedAddress').value = displayName;
     document.getElementById('selectedLatitude').value = lat.toFixed(6);

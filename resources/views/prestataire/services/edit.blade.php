@@ -746,14 +746,11 @@ document.addEventListener('DOMContentLoaded', function () {
     
     // Autocomplete functions
     function fetchLocationSuggestions(query) {
-        console.log('Fetching suggestions for:', query);
         fetch(`/api/public/geolocation/cities?search=${encodeURIComponent(query)}&limit=10`)
             .then(response => {
-                console.log('API Response status:', response.status);
                 return response.json();
             })
             .then(data => {
-                console.log('API Data received:', data);
                 if (data.success && data.data && data.data.length > 0) {
                     displaySuggestions(data.data, query);
                     if (data.warning) {
