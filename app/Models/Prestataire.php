@@ -361,6 +361,11 @@ class Prestataire extends Model
         return $this->hasOne(PrestataireVerificationRequest::class)->latest();
     }
 
+    public function ambassadorAssignment()
+    {
+        return $this->hasOne(PrestataireAmbassadorAssignment::class);
+    }
+
     /**
      * Scope pour les prestataires approuvés
      */

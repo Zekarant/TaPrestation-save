@@ -21,6 +21,12 @@ class DescribeFoodSchema extends Command
     {
         $table = (string) $this->option('table');
 
+        // Whitelist : seuls les noms de table alphanumériques avec underscores sont autorisés
+        if (!preg_match('/^[a-zA-Z0-9_]+$/', $table)) {
+            $this->error("Nom de table invalide: {$table}");
+            return 1;
+        }
+
         if (!Schema::hasTable($table)) {
             $this->error("Table introuvable: {$table}");
             $this->line('Tables disponibles (préfixe food_):');

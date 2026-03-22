@@ -406,4 +406,21 @@ Route::middleware(['auth', 'role:administrateur', 'throttle:60,1'])
             Route::get('/commissions', [App\Http\Controllers\Admin\InvoiceController::class, 'commissions'])->name('commissions');
             Route::get('/{invoice}', [App\Http\Controllers\Admin\InvoiceController::class, 'show'])->name('show');
         });
+
+        // 17. Ambassadeurs Management
+        Route::prefix('ambassadors')->name('ambassadors.')->group(function () {
+            Route::get('/', [App\Http\Controllers\Admin\AmbassadorController::class, 'index'])->name('index');
+            Route::get('/create', [App\Http\Controllers\Admin\AmbassadorController::class, 'create'])->name('create');
+            Route::post('/', [App\Http\Controllers\Admin\AmbassadorController::class, 'store'])->name('store');
+            Route::get('/payouts', [App\Http\Controllers\Admin\AmbassadorController::class, 'payoutsIndex'])->name('payouts.index');
+            Route::get('/settings', [App\Http\Controllers\Admin\AmbassadorController::class, 'settings'])->name('settings');
+            Route::post('/settings', [App\Http\Controllers\Admin\AmbassadorController::class, 'updateSettings'])->name('settings.update');
+            Route::get('/{ambassador}', [App\Http\Controllers\Admin\AmbassadorController::class, 'show'])->name('show');
+            Route::get('/{ambassador}/edit', [App\Http\Controllers\Admin\AmbassadorController::class, 'edit'])->name('edit');
+            Route::put('/{ambassador}', [App\Http\Controllers\Admin\AmbassadorController::class, 'update'])->name('update');
+            Route::delete('/{ambassador}', [App\Http\Controllers\Admin\AmbassadorController::class, 'destroy'])->name('destroy');
+            Route::get('/{ambassador}/commissions', [App\Http\Controllers\Admin\AmbassadorController::class, 'commissions'])->name('commissions');
+            Route::post('/{ambassador}/payout', [App\Http\Controllers\Admin\AmbassadorController::class, 'createPayout'])->name('payout');
+            Route::post('/{ambassador}/assign-prestataire', [App\Http\Controllers\Admin\AmbassadorController::class, 'assignPrestataire'])->name('assign-prestataire');
+        });
     });

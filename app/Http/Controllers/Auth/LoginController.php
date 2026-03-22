@@ -83,8 +83,8 @@ class LoginController extends Controller
 
             // Prolonger la durée de vie du cookie de session pour iOS PWA
             if ($this->isPwaOrMobile($request)) {
-                // Cookie de session avec durée étendue (14 jours max pour limiter le risque de vol de session)
-                $sessionLifetime = 60 * 24 * 14; // 14 jours en minutes
+                // Cookie de session avec durée étendue (3 jours — compromis UX mobile / sécurité)
+                $sessionLifetime = 60 * 24 * 3; // 3 jours en minutes
                 config(['session.lifetime' => $sessionLifetime]);
 
                 // Régénérer le cookie avec la nouvelle durée
@@ -116,6 +116,8 @@ class LoginController extends Controller
                 return redirect()->route('prestataire.dashboard')->with('success', 'Connexion réussie ! Bienvenue dans votre espace prestataire.');
             } elseif ($user->role === 'admin') {
                 return redirect()->route('administrateur.dashboard')->with('success', 'Connexion réussie ! Bienvenue dans l\'espace administrateur.');
+            } elseif ($user->role === 'ambassador') {
+                return redirect()->route('ambassador.dashboard')->with('success', 'Connexion réussie ! Bienvenue dans votre espace ambassadeur.');
             }
 
             // Fallback vers dashboard générique

@@ -70,6 +70,11 @@ if (file_exists($escrowRoutesPath)) {
     require $escrowRoutesPath;
 }
 
+// Ambassador referral tracking (public, rate-limited)
+Route::get('/ref/{code}', [\App\Http\Controllers\ReferralTrackingController::class, 'track'])
+    ->name('referral.track')
+    ->middleware('throttle:30,1');
+
 // Stripe webhooks (public endpoint, CSRF exempté dans VerifyCsrfToken)
 Route::post('/stripe/webhook', [\App\Http\Controllers\StripeWebhookController::class, 'handle'])->name('stripe.webhook');
 
@@ -740,4 +745,7 @@ Route::redirect('/driver', '/driver/internal/access', 302);
 
 // Food Ordering System Routes (Commandes Alimentaires)
 require base_path('routes/food.php');
+
+// Ambassador Routes
+require base_path('routes/ambassador.php');
 

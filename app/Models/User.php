@@ -74,6 +74,16 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(Prestataire::class);
     }
 
+    public function ambassador()
+    {
+        return $this->hasOne(Ambassador::class);
+    }
+
+    public function isAmbassador()
+    {
+        return $this->role === 'ambassador';
+    }
+
     /**
      * Check if the user is a client.
      */

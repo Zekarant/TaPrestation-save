@@ -8,6 +8,10 @@ use App\Models\Client;
 use App\Models\Prestataire;
 use App\Models\Category;
 use App\Models\UserSignupAudit;
+use App\Models\Ambassador;
+use App\Models\AmbassadorActivityLog;
+use App\Models\AmbassadorReferralVisit;
+use App\Models\PrestataireAmbassadorAssignment;
 use App\Services\RecaptchaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -16,6 +20,20 @@ use Illuminate\Support\Str;
 
 class RegisterController extends Controller
 {
+    /**
+     * Masque un email pour les logs (ex: jo***@example.com)
+     */
+    private function maskEmail(string $email): string
+    {
+        $parts = explode('@', $email);
+        if (count($parts) !== 2) {
+            return '***';
+        }
+        $local = $parts[0];
+        $masked = substr($local, 0, min(2, strlen($local))) . '***';
+        return $masked . '@' . $parts[1];
+    }
+
     /**
      * Vérifie si un nom ressemble à du spam (chaîne aléatoire)
      */
@@ -95,7 +113,7 @@ class RegisterController extends Controller
         if ($request->filled('website_url') || $request->filled('company_website')) {
             \Log::warning('Bot détecté via honeypot', [
                 'ip' => $request->ip(),
-                'email' => $request->input('email'),
+                'email' => $this->maskEmail($request->input('email', '')),
                 'honeypot_value' => $request->input('website_url') ?: $request->input('company_website'),
             ]);
             // Simuler un succès pour ne pas alerter le bot
@@ -109,7 +127,7 @@ class RegisterController extends Controller
             if ($elapsedSeconds < 5) {
                 \Log::warning('Bot détecté via temps trop rapide', [
                     'ip' => $request->ip(),
-                    'email' => $request->input('email'),
+                    'email' => $this->maskEmail($request->input('email', '')),
                     'elapsed_seconds' => $elapsedSeconds,
                 ]);
                 return redirect()->back()
@@ -123,7 +141,7 @@ class RegisterController extends Controller
         if ($this->isSpamName($name)) {
             \Log::warning('Bot détecté via nom suspect', [
                 'ip' => $request->ip(),
-                'email' => $request->input('email'),
+                'email' => $this->maskEmail($request->input('email', '')),
                 'name' => $name,
             ]);
             return redirect()->back()
@@ -372,7 +390,7 @@ class RegisterController extends Controller
             $category = Category::find($request->category_id);
             $subcategory = Category::find($request->subcategory_id);
 
-            Prestataire::create([
+            $prestataire = Prestataire::create([
                 'user_id' => $user->id,
                 'company_name' => $request->company_name,
                 'phone' => $request->phone,
@@ -385,6 +403,38 @@ class RegisterController extends Controller
                 'email_visible' => $request->boolean('email_visible'),
                 'phone_visible' => $request->boolean('phone_visible', true), // Par défaut visible pour prestataires
             ]);
+
+            // Ambassador referral tracking
+            $refCode = session('ambassador_referral_code');
+            if ($refCode) {
+                $ambassador = Ambassador::where('referral_code', $refCode)->where('status', 'active')->first();
+                if ($ambassador) {
+                    PrestataireAmbassadorAssignment::create([
+                        'ambassador_id' => $ambassador->id,
+                        'prestataire_id' => $prestataire->id,
+                        'source' => 'referral_link',
+                        'assigned_at' => now(),
+                    ]);
+
+                    // Mark the visit as converted
+                    AmbassadorReferralVisit::where('ambassador_id', $ambassador->id)
+                        ->where('converted', false)
+                        ->where('ip_address', $request->ip())
+                        ->latest('visited_at')
+                        ->take(1)
+                        ->update(['converted' => true, 'converted_prestataire_id' => $prestataire->id]);
+
+                    AmbassadorActivityLog::create([
+                        'ambassador_id' => $ambassador->id,
+                        'type' => 'prestataire_registered',
+                        'description' => "Nouveau prestataire inscrit via lien de parrainage : {$prestataire->company_name}",
+                        'metadata' => ['prestataire_id' => $prestataire->id, 'source' => 'referral_link'],
+                        'created_at' => now(),
+                    ]);
+
+                    session()->forget('ambassador_referral_code');
+                }
+            }
 
             // Connexion automatique
             auth()->login($user);

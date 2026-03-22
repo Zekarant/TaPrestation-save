@@ -779,6 +779,13 @@
                             <span>Clients</span>
                         </a>
                     </div>
+
+                    <div class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.ambassadors.*') ? 'active' : '' }}" href="{{ route('admin.ambassadors.index') }}">
+                            <i class="fas fa-handshake"></i>
+                            <span>Ambassadeurs</span>
+                        </a>
+                    </div>
                 </div>
                 
                 <!-- CONTENU & ACTIVITÉS -->

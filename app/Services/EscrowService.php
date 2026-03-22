@@ -1021,6 +1021,21 @@ class EscrowService
 
             DB::commit();
 
+            // Record ambassador commission if applicable (after commit, non-blocking)
+            $escrowType = str_contains((string) ($escrow->escrowable_type ?? ''), 'EquipmentRental') ? 'rental'
+                : (str_contains((string) ($escrow->escrowable_type ?? ''), 'FoodOrder') ? 'food'
+                : (str_contains((string) ($escrow->escrowable_type ?? ''), 'UrgentSale') ? 'urgent_sale' : 'service'));
+            $commissionRateUsed = $totalAmount > 0 ? round(($commissionAmount / $totalAmount) * 100, 2) : 0;
+            AmbassadorCommissionService::recordIfApplicable(
+                $escrow->prestataire_id,
+                $totalAmount,
+                $commissionAmount,
+                $commissionRateUsed,
+                $escrowType,
+                $escrowId,
+                $escrow->booking_id ?? null
+            );
+
             Log::info("Escrow #{$escrowId} libéré: {$amountToRelease}€ au presta #{$escrow->prestataire_id}" . ($stripeTransferId ? " (Transfer: {$stripeTransferId})" : ''));
 
             return true;
@@ -1105,6 +1120,9 @@ class EscrowService
             ]);
 
             DB::commit();
+
+            // Cancel ambassador commission if applicable (after commit, non-blocking)
+            AmbassadorCommissionService::cancelForEscrow($escrowId);
 
             Log::info("Escrow #{$escrowId} remboursé: {$actualRefund}€ au client #{$escrow->client_id}");
 

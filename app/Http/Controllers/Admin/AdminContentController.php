@@ -177,6 +177,10 @@ class AdminContentController extends Controller
 
     public function updateBanner(Request $request, $id)
     {
+        $request->validate([
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        ]);
+
         $data = [
             'title' => $request->title,
             'subtitle' => $request->subtitle,
@@ -221,6 +225,7 @@ class AdminContentController extends Controller
             'name' => 'required|string|max:255',
             'content' => 'required|string',
             'rating' => 'required|integer|min:1|max:5',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
         $photoPath = null;
@@ -246,6 +251,13 @@ class AdminContentController extends Controller
 
     public function updateTestimonial(Request $request, $id)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'content' => 'required|string',
+            'rating' => 'required|integer|min:1|max:5',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        ]);
+
         $data = [
             'name' => $request->name,
             'role' => $request->role,

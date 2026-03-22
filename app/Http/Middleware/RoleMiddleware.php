@@ -43,6 +43,9 @@ class RoleMiddleware
                 return $next($request);
             }
 
+            // Ambassadeurs : accès uniquement aux routes ambassadeur (pas client/prestataire)
+            // L'accès aux interfaces client/prestataire constituerait une escalade de privilèges
+
             // Fallback: si on demande le rôle 'prestataire' mais le champ role
             // n'a pas été mis à jour, autoriser si l'utilisateur a un profil
             // prestataire actif (utile pour migrations / updates partielles).

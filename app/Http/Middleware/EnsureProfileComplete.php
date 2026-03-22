@@ -65,8 +65,8 @@ class EnsureProfileComplete
      */
     protected function isProfileIncomplete($user): bool
     {
-        // Ne pas vérifier les admins
-        if ($user->role === 'admin') {
+        // Ne pas vérifier les admins et ambassadeurs
+        if (in_array($user->role, ['admin', 'administrateur', 'ambassador'])) {
             return false;
         }
 
