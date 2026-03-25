@@ -33,7 +33,7 @@ class SecurityHeaders
 
         $response->headers->set('Content-Security-Policy', implode(' ', [
             "default-src 'self' https: data: blob:;",
-            "script-src 'self' 'nonce-{$nonce}' https://js.stripe.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://maps.googleapis.com blob:;",
+            "script-src 'self' 'nonce-{$nonce}' 'unsafe-eval' https://js.stripe.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://maps.googleapis.com https://cdn.onesignal.com blob:;",
             "style-src 'self' https: 'unsafe-inline';",
             "img-src 'self' https: data: blob:;",
             "font-src 'self' https: data:;",

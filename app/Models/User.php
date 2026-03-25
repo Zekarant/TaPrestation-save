@@ -137,8 +137,12 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function hasRole($roles, ?string $guard = null): bool
     {
-        if (is_string($roles) && $this->role === $roles) {
-            return true;
+        if (is_string($roles)) {
+            return $this->role === $roles;
+        }
+
+        if (is_array($roles)) {
+            return in_array($this->role, $roles);
         }
 
         return parent::hasRole($roles, $guard);
