@@ -602,6 +602,18 @@
         </div>
     </header>
     
+    <!-- Flash messages -->
+    @if(session('success'))
+        <div style="background:#d1fae5;color:#065f46;padding:8px 16px;font-size:0.85rem;text-align:center;flex-shrink:0;">
+            {{ session('success') }}
+        </div>
+    @endif
+    @if($errors->any())
+        <div style="background:#fee2e2;color:#991b1b;padding:8px 16px;font-size:0.85rem;text-align:center;flex-shrink:0;">
+            {{ $errors->first() }}
+        </div>
+    @endif
+
     <!-- Messages -->
     <div class="messages-area" id="messages-area">
         @if($messages->count() > 0)
