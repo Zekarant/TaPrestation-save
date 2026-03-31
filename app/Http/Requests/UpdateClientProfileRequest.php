@@ -23,7 +23,7 @@ class UpdateClientProfileRequest extends FormRequest
                 'string',
                 'email',
                 'max:255',
-                Rule::unique('users')->ignore($userId),
+                Rule::unique('users')->ignore($userId)->whereNull('deleted_at'),
             ],
             'phone' => 'required|string|max:20',
             'address' => 'required|string|max:500',
