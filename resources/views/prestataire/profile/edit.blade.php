@@ -845,7 +845,7 @@
                                 <p class="text-xs text-gray-500">Action irréversible</p>
                             </div>
                         </div>
-                        <button type="button" onclick="openDeleteModal()" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition">
+                        <button type="button" id="openDeleteBtn" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition">
                             Supprimer
                         </button>
                     </div>
@@ -896,7 +896,7 @@
                     </div>
                     
                     <div class="flex gap-3 mt-4">
-                        <button type="button" onclick="closeDeleteModal()" class="flex-1 px-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 text-sm font-medium">
+                        <button type="button" id="closeDeleteBtn" class="flex-1 px-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 text-sm font-medium">
                             Annuler
                         </button>
                         <button type="submit" class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium">
@@ -1152,15 +1152,15 @@
         return hasMinLength && hasUpperCase && hasLowerCase && hasNumber;
     }
     
-    // Ensure functions are available in global scope
-    function openDeleteModal() {
-        document.getElementById('deleteModal').classList.remove('hidden');
-    }
-
-    function closeDeleteModal() {
-        document.getElementById('deleteModal').classList.add('hidden');
+    // Modal delete account
+    const deleteModal = document.getElementById('deleteModal');
+    document.getElementById('openDeleteBtn').addEventListener('click', function() {
+        deleteModal.classList.remove('hidden');
+    });
+    document.getElementById('closeDeleteBtn').addEventListener('click', function() {
+        deleteModal.classList.add('hidden');
         document.getElementById('deleteForm').reset();
-    }
+    });
 
     // ==========================================
     // AUTOCOMPLETION ADRESSE & GÉOLOCALISATION

@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Schema;
 
 use App\Support\TableExistenceCache;
+
 class DeletedStripeAccount extends Model
 {
     use HandlesLegacyEncryptedAttributes;
-use App\Support\TableExistenceCache;
 
     protected $fillable = [
         'email',

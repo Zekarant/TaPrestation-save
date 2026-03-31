@@ -312,7 +312,7 @@
                             <p class="text-xs text-gray-500">Action irréversible</p>
                         </div>
                     </div>
-                    <button type="button" onclick="openDeleteModal()" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition">
+                    <button type="button" id="openDeleteBtn" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition">
                         Supprimer
                     </button>
                 </div>
@@ -367,7 +367,7 @@
                     </div>
                     
                     <div class="flex gap-3 mt-5">
-                        <button type="button" onclick="closeDeleteModal()" 
+                        <button type="button" id="closeDeleteBtn"
                             class="flex-1 px-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition font-medium">
                             Annuler
                         </button>
@@ -386,19 +386,17 @@
 
 @push('scripts')
 <script>
-// Modal functions
-function openDeleteModal() {
-    document.getElementById('deleteModal').classList.remove('hidden');
-}
-
-function closeDeleteModal() {
-    document.getElementById('deleteModal').classList.add('hidden');
-}
-
-// Fermer le modal en cliquant à l'extérieur
-document.getElementById('deleteModal').addEventListener('click', function(e) {
+// Modal delete account
+const deleteModal = document.getElementById('deleteModal');
+document.getElementById('openDeleteBtn').addEventListener('click', function() {
+    deleteModal.classList.remove('hidden');
+});
+document.getElementById('closeDeleteBtn').addEventListener('click', function() {
+    deleteModal.classList.add('hidden');
+});
+deleteModal.addEventListener('click', function(e) {
     if (e.target === this) {
-        closeDeleteModal();
+        deleteModal.classList.add('hidden');
     }
 });
 

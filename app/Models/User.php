@@ -288,7 +288,10 @@ class User extends Authenticatable implements MustVerifyEmail
             if (str_starts_with($this->client->photo, 'http')) {
                 return $this->client->photo;
             }
-            return storage_asset_url($this->client->photo);
+            if (\Illuminate\Support\Facades\Storage::disk('public')->exists($this->client->photo)) {
+                return storage_asset_url($this->client->photo);
+            }
+            // File doesn't exist locally, fall through to Google avatar
         }
 
         // Fallback: check avatar field (e.g. Google OAuth photo)

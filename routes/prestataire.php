@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['role:prestataire'])->prefix('prestataire')->name('prestataire.')->group(function () {
     Route::get('/subscription/payment', [App\Http\Controllers\Subscription\SubscriptionController::class, 'showPaymentPage'])->name('subscription.payment');
     Route::post('/subscription/process-payment', [App\Http\Controllers\Subscription\SubscriptionController::class, 'processPayment'])->name('subscription.process-payment');
+    Route::delete('/profile/destroy', [\App\Http\Controllers\Prestataire\ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 /*
@@ -37,7 +38,6 @@ Route::middleware(['role:prestataire', 'profile.complete', 'subscription'])->pre
     Route::put('/profile/personal', [\App\Http\Controllers\Prestataire\ProfileController::class, 'updatePersonalInfo'])->name('profile.update.personal');
     Route::put('/profile/security', [\App\Http\Controllers\Prestataire\ProfileController::class, 'updateSecurity'])->name('profile.update.security');
     Route::delete('/profile/photo', [\App\Http\Controllers\Prestataire\ProfileController::class, 'deletePhoto'])->name('profile.delete-photo');
-    Route::delete('/profile/destroy', [\App\Http\Controllers\Prestataire\ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/profile/preview', [\App\Http\Controllers\Prestataire\ProfileController::class, 'preview'])->name('profile.preview');
     Route::get('/profile/{prestataire}', [\App\Http\Controllers\Prestataire\ProfileController::class, 'show'])->name('profile');
 
