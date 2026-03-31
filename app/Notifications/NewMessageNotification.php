@@ -4,16 +4,13 @@ namespace App\Notifications;
 
 use App\Models\Message;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Str;
-
 use App\Support\TableExistenceCache;
 class NewMessageNotification extends Notification
 {
     use Queueable;
-use App\Support\TableExistenceCache;
 
     protected $message;
 
@@ -37,26 +34,26 @@ use App\Support\TableExistenceCache;
     public function via($notifiable)
     {
         $channels = ['database'];
-        
+
         // Vérifier les préférences de notification de l'utilisateur
         $settings = null;
         if (TableExistenceCache::has('notification_settings')) {
             $settings = \App\Models\NotificationSetting::where('user_id', $notifiable->id)->first();
         }
-        
+
         // Par défaut, envoyer les emails si pas de settings
         $emailEnabled = $settings ? $settings->email_notifications && $settings->message_notifications : true;
-        
+
         if ($emailEnabled && $notifiable->email) {
             $channels[] = 'mail';
         }
-        
+
         // Note: Les notifications push sont gérées automatiquement par le listener
         // SendOneSignalPush après l'envoi de la notification database
-        
+
         return $channels;
     }
-    
+
     protected function sendPushNotification($deviceToken, $notifiable)
     {
         try {
@@ -84,7 +81,7 @@ use App\Support\TableExistenceCache;
         $senderName = $this->message->sender->name ?? 'Un utilisateur';
         $senderId = $this->message->sender_id;
         $url = config('app.url') . '/client/messaging/' . $senderId;
-        
+
         return (new MailMessage)
             ->subject('💬 Nouveau message reçu')
             ->greeting('Bonjour ' . $notifiable->name . '!')
@@ -103,10 +100,10 @@ use App\Support\TableExistenceCache;
     public function toArray($notifiable)
     {
         $senderId = $this->message->sender_id;
-        
+
         // Utiliser une URL absolue avec le préfixe /client/
         $url = config('app.url') . '/client/messaging/' . $senderId;
-        
+
         return [
             'type' => 'new_message',
             'message_id' => $this->message->id,

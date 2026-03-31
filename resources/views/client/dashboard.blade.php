@@ -14,13 +14,22 @@
                     {{-- Profil --}}
                     <div class="user-profile-card">
                         <div class="avatar-container">
-                            @if($client?->avatar)
-                                <img src="{{ asset('storage/' . $client->avatar) }}" alt="{{ auth()->user()->name }}" class="avatar-image">
-                            @elseif(auth()->user()->avatar)
-                                <img src="{{ asset('storage/' . auth()->user()->avatar) }}" alt="{{ auth()->user()->name }}" class="avatar-image">
+                            @php
+                                $dashUser = auth()->user();
+                                $dashAvatarUrl = null;
+                                if ($client?->avatar) {
+                                    $dashAvatarUrl = asset('storage/' . $client->avatar);
+                                } elseif ($dashUser->profile_photo_path) {
+                                    $dashAvatarUrl = asset('storage/' . $dashUser->profile_photo_path);
+                                } elseif ($dashUser->profile_photo_url) {
+                                    $dashAvatarUrl = $dashUser->profile_photo_url;
+                                }
+                            @endphp
+                            @if($dashAvatarUrl)
+                                <img src="{{ $dashAvatarUrl }}" alt="{{ $dashUser->name }}" class="avatar-image">
                             @else
                                 <div class="avatar-placeholder">
-                                    <span>{{ strtoupper(substr(auth()->user()->name, 0, 2)) }}</span>
+                                    <span>{{ strtoupper(substr($dashUser->name, 0, 2)) }}</span>
                                 </div>
                             @endif
                             <div class="avatar-badge">

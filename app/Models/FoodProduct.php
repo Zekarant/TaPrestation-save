@@ -14,7 +14,6 @@ use App\Support\TableExistenceCache;
 class FoodProduct extends Model
 {
     use HasFactory, SoftDeletes;
-use App\Support\TableExistenceCache;
 
     protected static ?bool $supportsAdvanceOrderColumns = null;
 
